@@ -223,12 +223,8 @@ QAction* DebuggerMainWnd::createAction(const QString& text, const char* icon,
                         int shortcut, const QObject* receiver,
                         const char* slot, const char* name)
 {
-    QAction* a = actionCollection()->addAction(name);
-    a->setText(text);
+    QAction* a = createAction(text, shortcut, receiver, slot, name);
     a->setIcon(QIcon(new KIconEngine(icon, KIconLoader::global())));
-    if (shortcut)
-        actionCollection()->setDefaultShortcut(a, QKeySequence(shortcut));
-    connect(a, SIGNAL(triggered()), receiver, slot);
     return a;
 }
 
@@ -237,6 +233,7 @@ QAction* DebuggerMainWnd::createAction(const QString& text,
                         const char* slot, const char* name)
 {
     QAction* a = actionCollection()->addAction(name);
+    a->setAutoRepeat(false);
     a->setText(text);
     if (shortcut)
         actionCollection()->setDefaultShortcut(a, QKeySequence(shortcut));
