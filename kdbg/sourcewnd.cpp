@@ -17,6 +17,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QCoreApplication>
 #include <kiconloader.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -37,13 +38,14 @@ SourceWindow::SourceWindow(const QString& fileName, QWidget* parent) :
     setCenterOnScroll(true);
 
     // load pixmaps
-    m_pcinner = KIconLoader::global()->loadIcon("pcinner", KIconLoader::User);
-    m_pcup = KIconLoader::global()->loadIcon("pcup", KIconLoader::User);
-    m_brkena = KIconLoader::global()->loadIcon("brkena", KIconLoader::User);
-    m_brkdis = KIconLoader::global()->loadIcon("brkdis", KIconLoader::User);
-    m_brktmp = KIconLoader::global()->loadIcon("brktmp", KIconLoader::User);
-    m_brkcond = KIconLoader::global()->loadIcon("brkcond", KIconLoader::User);
-    m_brkorph = KIconLoader::global()->loadIcon("brkorph", KIconLoader::User);
+    KIconLoader loader(qAppName(), { QCoreApplication::applicationDirPath() + "/../share/kdbg/pics" });
+    m_pcinner = loader.loadIcon("pcinner", KIconLoader::User);
+    m_pcup    = loader.loadIcon("pcup",    KIconLoader::User);
+    m_brkena  = loader.loadIcon("brkena",  KIconLoader::User);
+    m_brkdis  = loader.loadIcon("brkdis",  KIconLoader::User);
+    m_brktmp  = loader.loadIcon("brktmp",  KIconLoader::User);
+    m_brkcond = loader.loadIcon("brkcond", KIconLoader::User);
+    m_brkorph = loader.loadIcon("brkorph", KIconLoader::User);
     setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     setReadOnly(true);
     setViewportMargins(lineInfoAreaWidth(), 0, 0 ,0);

@@ -254,13 +254,14 @@ void BreakpointTable::initListAndIcons()
     m_ui.bpList->setColumnWidth(4, 200);
 
     // add pixmaps
-    QPixmap brkena = KIconLoader::global()->loadIcon("brkena", KIconLoader::User);
-    QPixmap brkdis = KIconLoader::global()->loadIcon("brkdis", KIconLoader::User);
-    QPixmap watchena = KIconLoader::global()->loadIcon("watchena", KIconLoader::User);
-    QPixmap watchdis = KIconLoader::global()->loadIcon("watchdis", KIconLoader::User);
-    QPixmap brktmp = KIconLoader::global()->loadIcon("brktmp", KIconLoader::User);
-    QPixmap brkcond = KIconLoader::global()->loadIcon("brkcond", KIconLoader::User);
-    QPixmap brkorph = KIconLoader::global()->loadIcon("brkorph", KIconLoader::User);
+    KIconLoader loader(qAppName(), { QCoreApplication::applicationDirPath() + "/../share/kdbg/pics" });
+    QPixmap brkena   = loader.loadIcon("brkena",   KIconLoader::User);
+    QPixmap brkdis   = loader.loadIcon("brkdis",   KIconLoader::User);
+    QPixmap watchena = loader.loadIcon("watchena", KIconLoader::User);
+    QPixmap watchdis = loader.loadIcon("watchdis", KIconLoader::User);
+    QPixmap brktmp   = loader.loadIcon("brktmp",   KIconLoader::User);
+    QPixmap brkcond  = loader.loadIcon("brkcond",  KIconLoader::User);
+    QPixmap brkorph  = loader.loadIcon("brkorph",  KIconLoader::User);
 
     /*
      * There are 32 different pixmaps: The basic enabled or disabled

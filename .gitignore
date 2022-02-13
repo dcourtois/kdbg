@@ -5,3 +5,4 @@ Makefile
 kdbg/kdbg_autogen/
 prefix.sh
 install_manifest.txt
+.vscode
