@@ -325,7 +325,7 @@ void SourceWindow::setPC(bool set, int lineNo, const DbgAddr& address, int frame
 void SourceWindow::find(const QString& text, bool caseSensitive, FindDirection dir)
 {
     ASSERT(dir == 1 || dir == -1);
-    QTextDocument::FindFlags flags = 0;
+    QTextDocument::FindFlags flags;
     if (caseSensitive)
 	flags |= QTextDocument::FindCaseSensitively;
     if (dir < 0)
@@ -782,8 +782,8 @@ void SourceWindow::setTabWidth(int numChars)
 	numChars = 8;
     QFontMetrics fm(document()->defaultFont());
     QString s;
-    int w = fm.width(s.fill('x', numChars));
-    setTabStopWidth(w);
+    int w = fm.horizontalAdvance(s.fill('x', numChars));
+    setTabStopDistance(w);
 }
 
 void SourceWindow::registerExpandedLine(int line)

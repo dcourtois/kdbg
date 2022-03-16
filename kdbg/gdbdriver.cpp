@@ -588,7 +588,7 @@ void GdbDriver::terminate()
 {
     if (m_state != DSidle)
     {
-	::kill(pid(), SIGINT);
+	::kill(processId(), SIGINT);
 	m_state = DSinterrupted;
     }
     flushCommands();
@@ -597,14 +597,14 @@ void GdbDriver::terminate()
 
 void GdbDriver::detachAndTerminate()
 {
-    ::kill(pid(), SIGINT);
+    ::kill(processId(), SIGINT);
     flushCommands();
     executeCmdString(DCinitialize, "detach\nquit\n", true);
 }
 
 void GdbDriver::interruptInferior()
 {
-    ::kill(pid(), SIGINT);
+    ::kill(processId(), SIGINT);
     // remove accidentally queued commands
     flushHiPriQueue();
 }
