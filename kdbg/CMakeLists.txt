@@ -97,6 +97,10 @@ target_link_libraries(kdbg
     ${LIB_UTIL}
 )
 
+target_compile_definitions(kdbg PRIVATE
+    -DKXMLGUI_INSTALL_DIR="${KXMLGUI_INSTALL_DIR}"
+)
+
 install(TARGETS kdbg ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES kdbg.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES kdbgrc DESTINATION ${CONFIG_INSTALL_DIR})

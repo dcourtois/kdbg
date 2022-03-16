@@ -4,7 +4,7 @@
  * See the file COPYING in the toplevel directory of the source directory.
  */
 
-#include <klocalizedstring.h>                /* i18n */
+#include <klocalizedstring.h>       /* i18n */
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -47,13 +47,24 @@
 #include "xsldbgdriver.h"
 #include "mydebug.h"
 #include <typeinfo>
-#include <sys/stat.h>                        /* mknod(2) */
-#include <unistd.h>                        /* getpid */
+#include <sys/stat.h>               /* mknod(2) */
+#include <unistd.h>                 /* getpid */
 
 
 static const char defaultTermCmdStr[] = "xterm -name kdbgio -title %T -e sh -c %C";
 static const char defaultSourceFilter[] = "*.c *.cc *.cpp *.c++ *.C *.CC";
 static const char defaultHeaderFilter[] = "*.h *.hh *.hpp *.h++";
+
+// local helper which will try to locate the kdbgui.rc file, in order to pass to the setupGui function.
+// note that previously, "kdbgui.rc" was just used as is, so this is the fallback value.
+static QString findGUIRc()
+{
+    QString guirc = QCoreApplication::applicationDirPath() + "/../" KXMLGUI_INSTALL_DIR "/kdbg/kdbgui.rc";
+    if (QFile::exists(guirc)) {
+        return guirc;
+    }
+    return "kdbgui.rc";
+}
 
 DebuggerMainWnd::DebuggerMainWnd() :
         KXmlGuiWindow(),
@@ -179,7 +190,7 @@ DebuggerMainWnd::DebuggerMainWnd() :
             this, SLOT(slotLocalsPopup(const QPoint&)));
 
     makeDefaultLayout();
-    setupGUI(KXmlGuiWindow::Default, "kdbgui.rc");
+    setupGUI(KXmlGuiWindow::Default, findGUIRc());
     restoreSettings(KSharedConfig::openConfig());
 
     // The animation button is not part of the restored window state.
