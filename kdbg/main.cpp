@@ -5,7 +5,7 @@
  */
 
 
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <QApplication>
@@ -14,7 +14,7 @@
 #include "dbgmainwnd.h"
 #include "typetable.h"
 #include "version.h"
-#include <stdlib.h>			/* getenv(3) */
+#include <stdlib.h>                        /* getenv(3) */
 #include "mydebug.h"
 
 
@@ -25,23 +25,23 @@ int main(int argc, char** argv)
     KLocalizedString::setApplicationDomain("kdbg");
 
     KAboutData aboutData("kdbg", i18n("KDbg"),
-			 KDBG_VERSION,
-			 i18n("A Debugger"),
-			 KAboutLicense::GPL_V2,
-			 i18n("(c) 1998-2020 Johannes Sixt"),
-			 {},	/* any text */
-			 "http://www.kdbg.org/",
-			 "j6t@kdbg.org");
+                         KDBG_VERSION,
+                         i18n("A Debugger"),
+                         KAboutLicense::GPL_V2,
+                         i18n("(c) 1998-2020 Johannes Sixt"),
+                         {},        /* any text */
+                         "http://www.kdbg.org/",
+                         "j6t@kdbg.org");
     aboutData.addAuthor(i18n("Johannes Sixt"), QString(), "j6t@kdbg.org");
     aboutData.addCredit(i18n("Keith Isdale"),
-			i18n("XSLT debugging"),
-			"k_isdale@tpg.com.au");
+                        i18n("XSLT debugging"),
+                        "k_isdale@tpg.com.au");
     aboutData.addCredit(i18n("Daniel Kristjansson"),
-			i18n("Register groups and formatting"),
-			"danielk@cat.nyu.edu");
+                        i18n("Register groups and formatting"),
+                        "danielk@cat.nyu.edu");
     aboutData.addCredit(i18n("David Edmundson"),
-			i18n("KDE4 porting"),
-			"david@davidedmundson.co.uk");
+                        i18n("KDE4 porting"),
+                        "david@davidedmundson.co.uk");
     KAboutData::setApplicationData(aboutData);
 
     /* take component name and org. name from KAboutData */
@@ -57,10 +57,10 @@ int main(int argc, char** argv)
     parser.setApplicationDescription(aboutData.shortDescription());
 
     auto opt = [&](const char* opt, QString desc, const char* arg) {
-	parser.addOption(QCommandLineOption(QStringList() << QLatin1String(opt), desc, QLatin1String(arg)));
+        parser.addOption(QCommandLineOption(QStringList() << QLatin1String(opt), desc, QLatin1String(arg)));
     };
     auto opt0 = [&](const char* opt, QString desc) {
-	parser.addOption(QCommandLineOption(QStringList() << QLatin1String(opt), desc));
+        parser.addOption(QCommandLineOption(QStringList() << QLatin1String(opt), desc));
     };
     opt("t", i18n("transcript of conversation with the debugger"), "file");
     opt("r", i18n("remote debugging via <device>"), "device");
@@ -85,10 +85,10 @@ int main(int argc, char** argv)
     // session management
     bool restored = false;
     if (app.isSessionRestored()) {
-	if (KMainWindow::canBeRestored(1)) {
-	    debugger->restore(1);
-	    restored = true;
-	}
+        if (KMainWindow::canBeRestored(1)) {
+            debugger->restore(1);
+            restored = true;
+        }
     }
 
     debugger->show();
@@ -98,7 +98,7 @@ int main(int argc, char** argv)
     QString transcript = parser.value("t");
     QString remote = parser.value("r");
     if (!remote.isEmpty())
-	debugger->setRemoteDevice(remote);
+        debugger->setRemoteDevice(remote);
 
     QString lang = parser.value("l");
 
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 
     // check environment variable for transcript file name
     if (transcript.isEmpty()) {
-	transcript = getenv("KDBG_TRANSCRIPT");
+        transcript = getenv("KDBG_TRANSCRIPT");
     }
     debugger->setTranscript(transcript);
 
@@ -119,27 +119,27 @@ int main(int argc, char** argv)
     QStringList posArgs = parser.positionalArguments();
 
     if (!restored && posArgs.count() > 0) {
-	// attach to process?
-	if (!pid.isEmpty()) {
-	    TRACE("pid: " + pid);
-	    debugger->setAttachPid(pid);
-	}
-	// check for core file; use it only if we're not attaching to a process
-	else if (posArgs.count() > 1 && pid.isEmpty()) {
-	    debugger->setCoreFile(posArgs[1]);
-	}
-	if (!debugger->debugProgram(posArgs[0], lang)) {
-	    // failed
-	    TRACE("cannot start debugger");
-	    KMessageBox::error(debugger, i18n("Cannot start debugger."));
+        // attach to process?
+        if (!pid.isEmpty()) {
+            TRACE("pid: " + pid);
+            debugger->setAttachPid(pid);
+        }
+        // check for core file; use it only if we're not attaching to a process
+        else if (posArgs.count() > 1 && pid.isEmpty()) {
+            debugger->setCoreFile(posArgs[1]);
+        }
+        if (!debugger->debugProgram(posArgs[0], lang)) {
+            // failed
+            TRACE("cannot start debugger");
+            KMessageBox::error(debugger, i18n("Cannot start debugger."));
 
-	    debugger->setCoreFile(QString());
-	    debugger->setAttachPid(QString());
-	} else {
-	    if (!programArgs.isEmpty()) {
-		debugger->overrideProgramArguments(programArgs);
-	    }
-	}
+            debugger->setCoreFile(QString());
+            debugger->setAttachPid(QString());
+        } else {
+            if (!programArgs.isEmpty()) {
+                debugger->overrideProgramArguments(programArgs);
+            }
+        }
     }
 
     int rc = app.exec();

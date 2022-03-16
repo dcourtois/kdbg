@@ -66,7 +66,7 @@ class XsldbgDriver:public DebuggerDriver {
 
   protected:
     QString m_programWD;        /* just an intermediate storage */
-    QString m_xslFile;		/* needed to display it initially */
+    QString m_xslFile;                /* needed to display it initially */
     bool m_haveDataFile;       /* have we set the XML data file to use? */ 
     QString m_redirect;         /* redirection to /dev/null */
 

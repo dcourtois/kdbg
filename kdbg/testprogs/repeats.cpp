@@ -5,7 +5,7 @@
 
 struct Big {
     struct bog {
-	short b[40];
+        short b[40];
     } a[40];
     short c[40][40];
 };
@@ -35,18 +35,18 @@ int main()
     void (*apf[30])(int);
 
     for (int i = 1; i < 29; i++)
-	apf[i] = f;
+        apf[i] = f;
 
     QString s[300];
 
     for (int i = 0; i < 300; i++)
-	s[i] = QString::asprintf("String %d", i);
+        s[i] = QString::asprintf("String %d", i);
 
     s[21] = s[48];
 
     int many[300];
     for (int i = 0; i < 300; i++)
-	    many[i] = i;
+            many[i] = i;
 
     IncompleteCharTest();
     return 0;

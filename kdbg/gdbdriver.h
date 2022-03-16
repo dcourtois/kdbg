@@ -32,23 +32,23 @@ public:
     ExprValue* parseQCharArray(const char* output, bool wantErrorValue, bool qt3like) override;
     void parseBackTrace(const char* output, std::list<StackFrame>& stack) override;
     bool parseFrameChange(const char* output, int& frameNo,
-				  QString& file, int& lineNo, DbgAddr& address) override;
+                                  QString& file, int& lineNo, DbgAddr& address) override;
     bool parseBreakList(const char* output, std::list<Breakpoint>& brks) override;
     std::list<ThreadInfo> parseThreadList(const char* output) override;
     bool parseBreakpoint(const char* output, int& id,
-				 QString& file, int& lineNo, QString& address) override;
+                                 QString& file, int& lineNo, QString& address) override;
     void parseLocals(const char* output, std::list<ExprValue*>& newVars) override;
     ExprValue* parsePrintExpr(const char* output, bool wantErrorValue) override;
     bool parseChangeWD(const char* output, QString& message) override;
     bool parseChangeExecutable(const char* output, QString& message) override;
     bool parseCoreFile(const char* output) override;
     uint parseProgramStopped(const char* output, bool haveCoreFile,
-				     QString& message) override;
+                                     QString& message) override;
     QStringList parseSharedLibs(const char* output) override;
     bool parseFindType(const char* output, QString& type) override;
     std::list<RegisterInfo> parseRegisters(const char* output) override;
     bool parseInfoLine(const char* output,
-			       QString& addrFrom, QString& addrTo) override;
+                               QString& addrFrom, QString& addrTo) override;
     QString parseInfoTarget(const char* output) override;
     std::list<DisassembledCode> parseDisassemble(const char* output) override;
     QString parseMemoryDump(const char* output, std::list<MemoryDump>& memdump) override;
@@ -56,10 +56,10 @@ public:
     QString editableValue(VarTree* value) override;
     QString parseSetDisassFlavor(const char* output) override;
 protected:
-    QString m_programWD;		/* just an intermediate storage */
-    QString m_redirect;			/* redirection to /dev/null */
-    bool m_littleendian = true;		/* if gdb works with little endian or big endian */
-    QString m_defaultCmd;		/* how to invoke gdb */
+    QString m_programWD;                /* just an intermediate storage */
+    QString m_redirect;                        /* redirection to /dev/null */
+    bool m_littleendian = true;                /* if gdb works with little endian or big endian */
+    QString m_defaultCmd;                /* how to invoke gdb */
 
     QString makeCmdString(DbgCommand cmd) override;
     QString makeCmdString(DbgCommand cmd, QString strArg) override;

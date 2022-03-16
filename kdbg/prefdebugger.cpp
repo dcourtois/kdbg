@@ -4,21 +4,21 @@
  * See the file COPYING in the toplevel directory of the source directory.
  */
 
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include "prefdebugger.h"
 #include <QVariant>
 
 PrefDebugger::PrefDebugger(QWidget* parent) :
-	QWidget(parent),
-	m_grid(this),
-	m_defaultHint(this),
-	m_debuggerCCppLabel(this),
-	m_debuggerCCpp(this),
-	m_terminalHint(this),
-	m_terminalLabel(this),
-	m_terminal(this),
-	m_disassLabel(this),
-	m_disassCombo(this)
+        QWidget(parent),
+        m_grid(this),
+        m_defaultHint(this),
+        m_debuggerCCppLabel(this),
+        m_debuggerCCpp(this),
+        m_terminalHint(this),
+        m_terminalLabel(this),
+        m_terminal(this),
+        m_disassLabel(this),
+        m_disassCombo(this)
 {
     m_defaultHint.setText(i18n("To revert to the default settings, clear the entries."));
     m_defaultHint.setMinimumHeight(m_defaultHint.sizeHint().height());
@@ -32,8 +32,8 @@ PrefDebugger::PrefDebugger(QWidget* parent) :
     m_grid.addWidget(&m_debuggerCCpp, 1, 1);
 
     m_terminalHint.setText(i18n("%T will be replaced with a title string,\n"
-				"%C will be replaced by a Bourne shell script that\n"
-				"keeps the terminal window open."));
+                                "%C will be replaced by a Bourne shell script that\n"
+                                "keeps the terminal window open."));
     m_terminalHint.setMinimumHeight(m_terminalHint.sizeHint().height());
     m_grid.addWidget(&m_terminalHint, 2, 1);
 

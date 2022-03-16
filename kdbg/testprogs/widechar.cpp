@@ -3,8 +3,8 @@
 #include <string>
 
 struct WChar {
-	const wchar_t* cwstr;
-	wchar_t* wstr;
+        const wchar_t* cwstr;
+        wchar_t* wstr;
 };
 
 int main()
@@ -20,9 +20,9 @@ int main()
    std::u16string stdu16str = u"std::u16string: \x20ac";
    std::u32string stdu32str = U"std::u32string: \x0001f604";
 
-   wchar_t wstr[64] = { 0 },		// L'\0' <repeats...>
-	*wstrPtr = wstr;
-   wcscpy(wstr, L"Some string");	// L"str", '\0' <repeats...>
+   wchar_t wstr[64] = { 0 },                // L'\0' <repeats...>
+        *wstrPtr = wstr;
+   wcscpy(wstr, L"Some string");        // L"str", '\0' <repeats...>
    wchar_t wc = wstr[0];
 
    WChar s = { 0, wstr };

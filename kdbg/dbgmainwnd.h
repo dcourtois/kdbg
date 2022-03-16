@@ -113,21 +113,21 @@ protected:
     QAction* m_bpSetTempAction;
     QAction* m_bpEnableAction;
     QAction* m_editValueAction;
-    QString m_lastDirectory;		/* the dir of the most recently opened file */
+    QString m_lastDirectory;                /* the dir of the most recently opened file */
 
 protected:
     bool queryClose() override;
     QAction* createAction(const QString& text, const char* icon,
-			int shortcut, const QObject* receiver,
-			const char* slot, const char* name);
+                        int shortcut, const QObject* receiver,
+                        const char* slot, const char* name);
     QAction* createAction(const QString& text,
-			int shortcut, const QObject* receiver,
-			const char* slot, const char* name);
+                        int shortcut, const QObject* receiver,
+                        const char* slot, const char* name);
 
     // the debugger proper
     QString m_debuggerCmdStr;
     KDebugger* m_debugger;
-    QString m_transcriptFile;		/* where gdb dialog is logged */
+    QString m_transcriptFile;                /* where gdb dialog is logged */
 
     /**
      * Starts to debug the specified program using the specified language
@@ -148,12 +148,12 @@ protected:
 
     QString createOutputWindow();
 
-    bool m_popForeground;		/* whether main wnd raises when prog stops */
-    int m_backTimeout;			/* when wnd goes back */
-    int m_tabWidth;			/* tab width in characters (can be 0) */
+    bool m_popForeground;                /* whether main wnd raises when prog stops */
+    int m_backTimeout;                        /* when wnd goes back */
+    int m_tabWidth;                        /* tab width in characters (can be 0) */
     QString m_sourceFilter;
     QString m_headerFilter;
-    QString m_asmGlobalFlavor;		/* disassembly flavor for x86 architecture */
+    QString m_asmGlobalFlavor;                /* disassembly flavor for x86 architecture */
 
     void setTerminalCmd(const QString& cmd);
     void setDebuggerCmdStr(const QString& cmd);

@@ -5,7 +5,7 @@
  */
 
 #include "pgmsettings.h"
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include <QComboBox>
 #include <QFileInfo>
 #include <QLineEdit>
@@ -17,14 +17,14 @@
 
 
 ChooseDriver::ChooseDriver(QWidget* parent) :
-	QWidget(parent)
+        QWidget(parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     QGridLayout* gridLayout = new QGridLayout;
 
     QLabel* label = new QLabel(this);
     label->setText(i18n("How to invoke &GDB - leave empty to use\n"
-			"the default from the global options:"));
+                        "the default from the global options:"));
     label->setMinimumSize(label->sizeHint());
     layout->addWidget(label);
 
@@ -70,8 +70,8 @@ QString ChooseDriver::disassemblyFlavor() const
 void ChooseDriver::setIsX86(bool isX86)
 {
     QString toolTipMsg = isX86 ?
-	i18n("Disassembly flavor for x86 architecture") :
-	i18n("Disassembly flavor is only available for x86 architecture");
+        i18n("Disassembly flavor for x86 architecture") :
+        i18n("Disassembly flavor is only available for x86 architecture");
 
     m_disassComboBox->setToolTip(toolTipMsg);
     m_disassComboBox->setEnabled(isX86);
@@ -84,7 +84,7 @@ void ChooseDriver::setDisassemblyFlavor(const QString& flavor)
 }
 
 OutputSettings::OutputSettings(QWidget* parent) :
-	QWidget(parent)
+        QWidget(parent)
 {
     m_group = new QButtonGroup(this);
 
@@ -130,9 +130,9 @@ void OutputSettings::slotLevelChanged(int id)
 
 
 ProgramSettings::ProgramSettings(QWidget* parent, QString exeName) :
-	KPageDialog(parent),
-	m_chooseDriver(this),
-	m_output(this)
+        KPageDialog(parent),
+        m_chooseDriver(this),
+        m_output(this)
 {
     // construct title
     QFileInfo fi(exeName);

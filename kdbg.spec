@@ -43,17 +43,17 @@ make -j4
 %install
 
 if [ -z "$KDEDIR" ]; then
-	export KDEDIR=%{prefix}
+        export KDEDIR=%{prefix}
 fi
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 cd $RPM_BUILD_ROOT
 find . -type f | sed -e 's,^\.,\%attr(-\,root\,root) ,' \
-	-e '/\/config\//s|^|%config|' > \
-	$RPM_BUILD_DIR/file.list.%{name}
+        -e '/\/config\//s|^|%config|' > \
+        $RPM_BUILD_DIR/file.list.%{name}
 find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> \
-	$RPM_BUILD_DIR/file.list.%{name}
+        $RPM_BUILD_DIR/file.list.%{name}
 echo "%docdir $KDEDIR/share/doc/HTML" >> $RPM_BUILD_DIR/file.list.%{name}
 
 

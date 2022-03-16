@@ -4,7 +4,7 @@
  * See the file COPYING in the toplevel directory of the source directory.
  */
 
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -47,8 +47,8 @@
 #include "xsldbgdriver.h"
 #include "mydebug.h"
 #include <typeinfo>
-#include <sys/stat.h>			/* mknod(2) */
-#include <unistd.h>			/* getpid */
+#include <sys/stat.h>                        /* mknod(2) */
+#include <unistd.h>                        /* getpid */
 
 
 static const char defaultTermCmdStr[] = "xterm -name kdbgio -title %T -e sh -c %C";
@@ -63,7 +63,7 @@ DebuggerMainWnd::DebuggerMainWnd() :
 #endif
         m_outputTermCmdStr(defaultTermCmdStr),
         m_outputTermProc(new QProcess),
-        m_ttyLevel(-1),			/* no tty yet */
+        m_ttyLevel(-1),                        /* no tty yet */
         m_popForeground(false),
         m_backTimeout(1000),
         m_tabWidth(0),
@@ -740,8 +740,8 @@ DebuggerDriver* DebuggerMainWnd::driverFromLang(QString lang)
 
     // The following table relates languages and debugger drivers
     static const struct L {
-        const char* shortest;	// abbreviated to this is still unique
-        const char* full;	// full name of language
+        const char* shortest;        // abbreviated to this is still unique
+        const char* full;        // full name of language
         int driver;
     } langs[] = {
         { "c",       "c++",     1 },
@@ -912,7 +912,7 @@ void DebuggerMainWnd::setDebuggerCmdStr(const QString& cmd)
 
 void DebuggerMainWnd::slotDebuggerStarting()
 {
-    if (m_debugger == 0)		/* paranoia check */
+    if (m_debugger == 0)                /* paranoia check */
         return;
 
     if (m_ttyLevel == m_debugger->ttyLevel())
@@ -972,7 +972,7 @@ QString DebuggerMainWnd::createOutputWindow()
     QString fifoName = QString::asprintf("/tmp/kdbgttywin%05d", ::getpid());
 
     // create a fifo that will pass in the tty name
-    QFile::remove(fifoName);		// remove remnants
+    QFile::remove(fifoName);                // remove remnants
 #ifdef HAVE_MKFIFO
     if (::mkfifo(fifoName.toLocal8Bit(), S_IRUSR|S_IWUSR) < 0) {
         // failed
@@ -993,8 +993,8 @@ QString DebuggerMainWnd::createOutputWindow()
      */
     static const char shellScriptFmt[] =
         "tty>%s;"
-        "trap \"\" INT QUIT TSTP;"	/* ignore various signals */
-        "exec<&-;exec>&-;"		/* close stdin and stdout */
+        "trap \"\" INT QUIT TSTP;"        /* ignore various signals */
+        "exec<&-;exec>&-;"                /* close stdin and stdout */
         "while :;do sleep 3600;done";
     // let config file override this script
     QString shellScript;
@@ -1031,7 +1031,7 @@ QString DebuggerMainWnd::createOutputWindow()
             int pos = str.indexOf(substitute[j].seq);
             if (pos >= 0) {
                 str.replace(pos, 2, substitute[j].replace);
-                break;		/* substitute only one sequence */
+                break;                /* substitute only one sequence */
             }
         }
     }
@@ -1153,7 +1153,7 @@ void DebuggerMainWnd::slotEditValue()
     if (m_localVariables->isEditing() ||
         m_watches->watchVariables()->isEditing())
     {
-        return;				/* don't edit twice */
+        return;                                /* don't edit twice */
     }
 
     VarTree* expr = wnd->selectedItem();

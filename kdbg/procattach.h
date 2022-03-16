@@ -51,8 +51,8 @@ protected:
 
     QProcess* m_ps;
     // parse state
-    int m_pidCol;	//!< The PID column in the ps output
-    int m_ppidCol;	//!< The parent-PID column in the ps output
+    int m_pidCol;        //!< The PID column in the ps output
+    int m_ppidCol;        //!< The parent-PID column in the ps output
     QByteArray m_token;
     std::vector<QString> m_line;
 };

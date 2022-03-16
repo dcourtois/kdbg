@@ -5,7 +5,7 @@
 
 static int nolocals(int argc, const char** argv)
 {
-	printf("argc=%d, argv[0]=%s\n", argc, argv[0]);
+        printf("argc=%d, argv[0]=%s\n", argc, argv[0]);
 }
 
 
@@ -13,14 +13,14 @@ static int nolocals(int argc, const char** argv)
 
 static int noargs()
 {
-	int c = 1;
-	const char* pgm[] = { "foo", 0 };
-	nolocals(c, pgm);
+        int c = 1;
+        const char* pgm[] = { "foo", 0 };
+        nolocals(c, pgm);
 }
 
 
 int main(int argc, const char** argv)
 {
-	noargs();
-	nolocals(argc, argv);
+        noargs();
+        nolocals(argc, argv);
 }

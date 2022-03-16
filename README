@@ -3,20 +3,20 @@ KDE, the K Desktop Environment.
 
 To build and install:
 
-	cmake .
-	make
-	sudo make install
+        cmake .
+        make
+        sudo make install
 
 It may be necessary to tell the install location explicitly,
 then use, for example,
 
-	cmake -DCMAKE_INSTALL_PREFIX=/usr .
+        cmake -DCMAKE_INSTALL_PREFIX=/usr .
 
 The KDE header files libraries must be available. Make sure
 that the development packages are installed.
 
 The homepage is at
 
-	http://www.kdbg.org/
+        http://www.kdbg.org/
 
 Johannes Sixt <j6t@kdbg.org>

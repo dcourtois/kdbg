@@ -2,31 +2,31 @@ include(ECMInstallIcons)
 
 # compress SVG files
 file(GLOB svgs RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-	"${CMAKE_CURRENT_SOURCE_DIR}/sc-*.svg")
+        "${CMAKE_CURRENT_SOURCE_DIR}/sc-*.svg")
 set(svgzs)
 foreach(svg ${svgs})
-	set(svgz "${CMAKE_CURRENT_BINARY_DIR}/${svg}z")
-	add_custom_command(
-		OUTPUT "${svgz}"
-		COMMAND gzip < "${CMAKE_CURRENT_SOURCE_DIR}/${svg}" > "${svgz}"
-		DEPENDS "${svg}"
-	)
-	set(svgzs ${svgzs} "${svgz}")
+        set(svgz "${CMAKE_CURRENT_BINARY_DIR}/${svg}z")
+        add_custom_command(
+                OUTPUT "${svgz}"
+                COMMAND gzip < "${CMAKE_CURRENT_SOURCE_DIR}/${svg}" > "${svgz}"
+                DEPENDS "${svg}"
+        )
+        set(svgzs ${svgzs} "${svgz}")
 endforeach(svg)
 add_custom_target(generatesvgz ALL DEPENDS ${svgzs})
 
 # line items and other pictograms
 set(PICTOGRAMS
-	brkena.png
-	brkdis.png
-	brktmp.png
-	brkcond.png
-	brkorph.png
-	pcinner.png
-	pcup.png
-	watchena.png
-	watchdis.png
-	pointer.xpm)
+        brkena.png
+        brkdis.png
+        brktmp.png
+        brkcond.png
+        brkorph.png
+        pcinner.png
+        pcup.png
+        watchena.png
+        watchdis.png
+        pointer.xpm)
 
 install(FILES ${PICTOGRAMS} DESTINATION "${DATA_INSTALL_DIR}/kdbg/pics")
 

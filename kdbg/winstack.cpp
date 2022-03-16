@@ -13,27 +13,27 @@
 #include <QToolTip>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include "mydebug.h"
 
 
 
 WinStack::WinStack(QWidget* parent) :
-	QTabWidget(parent),
-	m_pcLine(-1),
-	m_tabWidth(0)
+        QTabWidget(parent),
+        m_pcLine(-1),
+        m_tabWidth(0)
 {
     setTabsClosable(true);
     setMovable(true);
 
     connect(&m_findDlg.m_buttonForward,
-	    SIGNAL(clicked()), SLOT(slotFindForward()));
+            SIGNAL(clicked()), SLOT(slotFindForward()));
     connect(&m_findDlg.m_buttonBackward,
-	    SIGNAL(clicked()), SLOT(slotFindBackward()));
+            SIGNAL(clicked()), SLOT(slotFindBackward()));
 
     connect(this, SIGNAL(setTabWidth(int)), this, SLOT(slotSetTabWidth(int)));
     connect(this, SIGNAL(tabCloseRequested(int)),
-	    this, SLOT(slotCloseTab(int)));
+            this, SLOT(slotCloseTab(int)));
 }
 
 WinStack::~WinStack()
@@ -45,11 +45,11 @@ void WinStack::contextMenuEvent(QContextMenuEvent* e)
     // get the context menu from the GUI factory
     QWidget* top = this;
     do
-	top = top->parentWidget();
+        top = top->parentWidget();
     while (!top->isTopLevel());
     KXmlGuiWindow* mw = static_cast<KXmlGuiWindow*>(top);
     QMenu* m =
-	static_cast<QMenu*>(mw->factory()->container("popup_files_empty", mw));
+        static_cast<QMenu*>(mw->factory()->container("popup_files_empty", mw));
     m->exec(e->globalPos());
 }
 
@@ -57,7 +57,7 @@ void WinStack::contextMenuEvent(QContextMenuEvent* e)
 void WinStack::reloadAllFiles()
 {
     for (int i = count()-1; i >= 0; i--) {
-	windowAt(i)->reloadFile();
+        windowAt(i)->reloadFile();
     }
 }
 
@@ -71,18 +71,18 @@ void WinStack::activate(const QString& fileName, int lineNo, const DbgAddr& addr
     QFileInfo fi(fileName);
 
     if (!fi.isFile()) {
-	/*
-	 * We didn't find that file. Now check if it is a relative path and
-	 * try m_lastOpenDir as prefix.
-	 */
-	TRACE(fi.filePath() + (" not found, looking in " + m_lastOpenDir));
-	if (!fi.isRelative() || m_lastOpenDir.isEmpty()) {
-	    return;
-	}
-	fi.setFile(m_lastOpenDir + "/" + fi.filePath());
-	if (!fi.isFile()) {
-	    return;
-	}
+        /*
+         * We didn't find that file. Now check if it is a relative path and
+         * try m_lastOpenDir as prefix.
+         */
+        TRACE(fi.filePath() + (" not found, looking in " + m_lastOpenDir));
+        if (!fi.isRelative() || m_lastOpenDir.isEmpty()) {
+            return;
+        }
+        fi.setFile(m_lastOpenDir + "/" + fi.filePath());
+        if (!fi.isFile()) {
+            return;
+        }
     }
     // if this is not an absolute path name, make it one
     activatePath(fi.absoluteFilePath(), lineNo, address);
@@ -98,46 +98,46 @@ bool WinStack::activatePath(QString pathName, int lineNo, const DbgAddr& address
     // check whether the file is already open
     SourceWindow* fw = 0;
     for (int i = count()-1; i >= 0; i--) {
-	if (windowAt(i)->fileName() == pathName) {
-	    fw = windowAt(i);
-	    break;
-	}
+        if (windowAt(i)->fileName() == pathName) {
+            fw = windowAt(i);
+            break;
+        }
     }
     if (fw == 0) {
-	// not found, load it
-	fw = new SourceWindow(pathName, this);
+        // not found, load it
+        fw = new SourceWindow(pathName, this);
 
-	// slurp the file in
-	if (!fw->loadFile()) {
-	    // read failed
-	    delete fw;
-	    return false;
-	}
+        // slurp the file in
+        if (!fw->loadFile()) {
+            // read failed
+            delete fw;
+            return false;
+        }
 
-	int idx = addTab(fw, QFileInfo(pathName).fileName());
-	setTabToolTip(idx, pathName);
+        int idx = addTab(fw, QFileInfo(pathName).fileName());
+        setTabToolTip(idx, pathName);
 
-	connect(fw, SIGNAL(clickedLeft(const QString&,int,const DbgAddr&,bool)),
-		SIGNAL(toggleBreak(const QString&,int,const DbgAddr&,bool)));
-	connect(fw, SIGNAL(clickedMid(const QString&,int,const DbgAddr&)),
-		SIGNAL(enadisBreak(const QString&,int,const DbgAddr&)));
+        connect(fw, SIGNAL(clickedLeft(const QString&,int,const DbgAddr&,bool)),
+                SIGNAL(toggleBreak(const QString&,int,const DbgAddr&,bool)));
+        connect(fw, SIGNAL(clickedMid(const QString&,int,const DbgAddr&)),
+                SIGNAL(enadisBreak(const QString&,int,const DbgAddr&)));
 
-	// disassemble code
-	connect(fw, SIGNAL(disassemble(const QString&, int)),
-		SIGNAL(disassemble(const QString&, int)));
-	connect(fw, SIGNAL(expanded(int)), SLOT(slotExpandCollapse(int)));
-	connect(fw, SIGNAL(collapsed(int)), SLOT(slotExpandCollapse(int)));
+        // disassemble code
+        connect(fw, SIGNAL(disassemble(const QString&, int)),
+                SIGNAL(disassemble(const QString&, int)));
+        connect(fw, SIGNAL(expanded(int)), SLOT(slotExpandCollapse(int)));
+        connect(fw, SIGNAL(collapsed(int)), SLOT(slotExpandCollapse(int)));
 
-	// tab width
-	connect(this, SIGNAL(setTabWidth(int)), fw, SLOT(setTabWidth(int)));
-	fw->setTabWidth(m_tabWidth);
-	fw->setFocusPolicy(Qt::WheelFocus);
+        // tab width
+        connect(this, SIGNAL(setTabWidth(int)), fw, SLOT(setTabWidth(int)));
+        fw->setTabWidth(m_tabWidth);
+        fw->setFocusPolicy(Qt::WheelFocus);
 
-	// set PC if there is one
-	emit newFileLoaded();
-	if (m_pcLine >= 0) {
-	    setPC(true, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
-	}
+        // set PC if there is one
+        emit newFileLoaded();
+        if (m_pcLine >= 0) {
+            setPC(true, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
+        }
     }
     return activateWindow(fw, lineNo, address);
 }
@@ -146,7 +146,7 @@ bool WinStack::activateWindow(SourceWindow* fw, int lineNo, const DbgAddr& addre
 {
     // make the line visible
     if (lineNo >= 0) {
-	fw->scrollTo(lineNo, address);
+        fw->scrollTo(lineNo, address);
     }
 
     setCurrentWidget(fw);
@@ -164,7 +164,7 @@ bool WinStack::activeLine(QString& fileName, int& lineNo)
 bool WinStack::activeLine(QString& fileName, int& lineNo, DbgAddr& address)
 {
     if (activeWindow() == 0) {
-	return false;
+        return false;
     }
     
     fileName = activeFileName();
@@ -175,42 +175,42 @@ bool WinStack::activeLine(QString& fileName, int& lineNo, DbgAddr& address)
 void WinStack::updateLineItems(const KDebugger* dbg)
 {
     for (int i = count()-1; i >= 0; i--) {
-	windowAt(i)->updateLineItems(dbg);
+        windowAt(i)->updateLineItems(dbg);
     }
 }
 
 void WinStack::updatePC(const QString& fileName, int lineNo, const DbgAddr& address, int frameNo)
 {
     if (m_pcLine >= 0) {
-	setPC(false, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
+        setPC(false, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
     }
     m_pcFile = fileName;
     m_pcLine = lineNo;
     m_pcAddress = address.asString();
     m_pcFrame = frameNo;
     if (lineNo >= 0) {
-	setPC(true, fileName, lineNo, address, frameNo);
+        setPC(true, fileName, lineNo, address, frameNo);
     }
 }
 
 SourceWindow* WinStack::findByFileName(const QString& fileName) const
 {
     for (int i = count()-1; i >= 0; i--) {
-	if (windowAt(i)->fileNameMatches(fileName)) {
-	    return windowAt(i);
-	}
+        if (windowAt(i)->fileNameMatches(fileName)) {
+            return windowAt(i);
+        }
     }
     return 0;
 }
 
 void WinStack::setPC(bool set, const QString& fileName, int lineNo,
-		     const DbgAddr& address, int frameNo)
+                     const DbgAddr& address, int frameNo)
 {
     TRACE((set ? "set PC: " : "clear PC: ") + fileName +
-	  QString::asprintf(":%d#%d ", lineNo, frameNo) + address.asString());
+          QString::asprintf(":%d#%d ", lineNo, frameNo) + address.asString());
     SourceWindow* fw = findByFileName(fileName);
     if (fw)
-	fw->setPC(set, lineNo, address, frameNo);
+        fw->setPC(set, lineNo, address, frameNo);
 }
 
 SourceWindow* WinStack::windowAt(int i) const
@@ -227,40 +227,40 @@ QString WinStack::activeFileName() const
 {
     QString f;
     if (activeWindow() != 0)
-	f = activeWindow()->fileName();
+        f = activeWindow()->fileName();
     return f;
 }
 
 void WinStack::slotFindForward()
 {
     if (activeWindow() != 0)
-	activeWindow()->find(m_findDlg.searchText(), m_findDlg.caseSensitive(),
-			     SourceWindow::findForward);
+        activeWindow()->find(m_findDlg.searchText(), m_findDlg.caseSensitive(),
+                             SourceWindow::findForward);
 }
 
 void WinStack::slotFindBackward()
 {
     if (activeWindow() != 0)
-	activeWindow()->find(m_findDlg.searchText(), m_findDlg.caseSensitive(),
-			     SourceWindow::findBackward);
+        activeWindow()->find(m_findDlg.searchText(), m_findDlg.caseSensitive(),
+                             SourceWindow::findBackward);
 }
 
 bool WinStack::event(QEvent* evt)
 {
     if (evt->type() != QEvent::ToolTip)
-	return QTabWidget::event(evt);
+        return QTabWidget::event(evt);
 
     SourceWindow* w = activeWindow();
     if (w == 0)
-	return true;
+        return true;
 
     QPoint p = static_cast<QHelpEvent*>(evt)->globalPos();
     // get the word at the point
     QString word;
     QRect r;
     if (!w->wordAtPoint(w->mapFromGlobal(p), word, r)) {
-	QToolTip::hideText();
-	return true;
+        QToolTip::hideText();
+        return true;
     }
 
     // must be valid
@@ -281,12 +281,12 @@ void WinStack::slotShowValueTip(const QString& tipText)
 }
 
 void WinStack::slotDisassembled(const QString& fileName, int lineNo,
-				const std::list<DisassembledCode>& disass)
+                                const std::list<DisassembledCode>& disass)
 {
     SourceWindow* fw = findByFileName(fileName);
     if (fw == 0) {
-	// not found: ignore
-	return;
+        // not found: ignore
+        return;
     }
 
     fw->disassembled(lineNo, disass);
@@ -301,7 +301,7 @@ void WinStack::slotExpandCollapse(int)
     emit newFileLoaded();
 
     if (m_pcLine >= 0) {
-	setPC(true, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
+        setPC(true, m_pcFile, m_pcLine, DbgAddr(m_pcAddress), m_pcFrame);
     }
 }
 
@@ -321,17 +321,17 @@ void WinStack::slotSetTabWidth(int numChars)
 void WinStack::slotFileReload()
 {
     if (activeWindow() != 0) {
-	TRACE("reloading one file");
-	activeWindow()->reloadFile();
+        TRACE("reloading one file");
+        activeWindow()->reloadFile();
     }
 }
 
 void WinStack::slotViewFind()
 {
     if (m_findDlg.isVisible()) {
-	m_findDlg.done(0);
+        m_findDlg.done(0);
     } else {
-	m_findDlg.show();
+        m_findDlg.show();
     }
 }
 
@@ -341,7 +341,7 @@ void WinStack::slotBrkptSet()
     int lineNo;
     DbgAddr address;
     if (activeLine(file, lineNo, address))
-	emit toggleBreak(file, lineNo, address, false);
+        emit toggleBreak(file, lineNo, address, false);
 }
 
 void WinStack::slotBrkptSetTemp()
@@ -350,7 +350,7 @@ void WinStack::slotBrkptSetTemp()
     int lineNo;
     DbgAddr address;
     if (activeLine(file, lineNo, address))
-	emit toggleBreak(file, lineNo, address, true);
+        emit toggleBreak(file, lineNo, address, true);
 }
 
 void WinStack::slotBrkptEnable()
@@ -359,7 +359,7 @@ void WinStack::slotBrkptEnable()
     int lineNo;
     DbgAddr address;
     if (activeLine(file, lineNo, address))
-	emit enadisBreak(file, lineNo, address);
+        emit enadisBreak(file, lineNo, address);
 }
 
 void WinStack::slotMoveProgramCounter()
@@ -368,7 +368,7 @@ void WinStack::slotMoveProgramCounter()
     int lineNo;
     DbgAddr address;
     if (activeLine(file, lineNo, address))
-	emit moveProgramCounter(file, lineNo, address);
+        emit moveProgramCounter(file, lineNo, address);
 }
 
 void WinStack::slotClose()
@@ -380,7 +380,7 @@ void WinStack::slotCloseTab(int tab)
 {
     QWidget* w = widget(tab);
     if (!w)
-	return;
+        return;
 
     removeTab(tab);
     delete w;
@@ -388,12 +388,12 @@ void WinStack::slotCloseTab(int tab)
 
 
 FindDialog::FindDialog() :
-	QDialog(),
-	m_searchText(this),
-	m_caseCheck(this),
-	m_buttonForward(this),
-	m_buttonBackward(this),
-	m_buttonClose(this)
+        QDialog(),
+        m_searchText(this),
+        m_caseCheck(this),
+        m_buttonForward(this),
+        m_buttonBackward(this),
+        m_buttonClose(this)
 {
     setWindowTitle(i18n("Search"));
 

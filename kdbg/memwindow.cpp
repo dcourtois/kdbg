@@ -20,12 +20,12 @@ const int COL_DUMP_ASCII = 9;
 const int MAX_COL = 10;
 
 MemoryWindow::MemoryWindow(QWidget* parent) :
-	QWidget(parent),
-	m_debugger(0),
-	m_expression(this),
-	m_memory(this),
-	m_layout(QBoxLayout::TopToBottom, this),
-	m_format(MDTword | MDThex)
+        QWidget(parent),
+        m_debugger(0),
+        m_expression(this),
+        m_memory(this),
+        m_layout(QBoxLayout::TopToBottom, this),
+        m_format(MDTword | MDThex)
 {
     setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
@@ -37,17 +37,17 @@ MemoryWindow::MemoryWindow(QWidget* parent) :
 
     m_memory.setColumnCount(10);
     for (int i = 0; i < MAX_COL; i++) {
-	m_memory.header()->setSectionResizeMode(i, QHeaderView::Fixed);
+        m_memory.header()->setSectionResizeMode(i, QHeaderView::Fixed);
     }
     m_memory.header()->setStretchLastSection(false);
 
-    m_memory.setSortingEnabled(false);		/* don't sort */
+    m_memory.setSortingEnabled(false);                /* don't sort */
     m_memory.setAllColumnsShowFocus(true);
     m_memory.setRootIsDecorated(false);
     m_memory.header()->setSectionsClickable(false);
     m_memory.header()->setSectionsMovable(false);  // don't move columns
     m_memory.setHeaderHidden(true);                // hide header
-    m_memory.setContextMenuPolicy(Qt::NoContextMenu);	// defer to parent
+    m_memory.setContextMenuPolicy(Qt::NoContextMenu);        // defer to parent
 
     // get row height
     new QTreeWidgetItem(&m_memory, QStringList("0x179bf"));
@@ -61,13 +61,13 @@ MemoryWindow::MemoryWindow(QWidget* parent) :
     m_layout.activate();
 
     connect(&m_expression, SIGNAL(activated(const QString&)),
-	    this, SLOT(slotNewExpression(const QString&)));
+            this, SLOT(slotNewExpression(const QString&)));
     connect(m_expression.lineEdit(), SIGNAL(returnPressed()),
-	    this, SLOT(slotNewExpression()));
+            this, SLOT(slotNewExpression()));
     connect(m_memory.verticalScrollBar(), SIGNAL(valueChanged(int)),
-	    this, SLOT(verticalScrollBarMoved(int)));
+            this, SLOT(verticalScrollBarMoved(int)));
     connect(m_memory.verticalScrollBar(), SIGNAL(rangeChanged(int, int)),
-	    this, SLOT(verticalScrollBarRangeChanged(int, int)));
+            this, SLOT(verticalScrollBarRangeChanged(int, int)));
 
     // the popup menu
     QAction* pAction;
@@ -181,23 +181,23 @@ void MemoryWindow::slotNewExpression(const QString& newText)
     // (note: must count downwards because of removeItem!)
     for (int i = m_expression.count()-1; i >= 0; i--)
     {
-	if (m_expression.itemText(i) == text) {
-	    // yes it is!
-	    // look up the format that was used last time for this expr
-	    QMap<QString,unsigned>::iterator pFormat = m_formatCache.find(text);
-	    if (pFormat != m_formatCache.end()) {
-		m_format = *pFormat;
-		m_debugger->setMemoryFormat(m_format);
-	    }
-	    // remove this text, will be inserted at the top
-	    m_expression.removeItem(i);
-	}
+        if (m_expression.itemText(i) == text) {
+            // yes it is!
+            // look up the format that was used last time for this expr
+            QMap<QString,unsigned>::iterator pFormat = m_formatCache.find(text);
+            if (pFormat != m_formatCache.end()) {
+                m_format = *pFormat;
+                m_debugger->setMemoryFormat(m_format);
+            }
+            // remove this text, will be inserted at the top
+            m_expression.removeItem(i);
+        }
     }
     m_expression.insertItem(0, text);
     m_expression.setCurrentIndex(0);
 
     if (!text.isEmpty()) {
-	m_formatCache[text] = m_format;
+        m_formatCache[text] = m_format;
     }
 
     displayNewExpression(text);
@@ -229,9 +229,9 @@ void MemoryWindow::slotTypeChange(QAction* action)
 
     // compute new type
     if (id & MDTsizemask)
-	m_format = (m_format & ~MDTsizemask) | id;
+        m_format = (m_format & ~MDTsizemask) | id;
     if (id & MDTformatmask)
-	m_format = (m_format & ~MDTformatmask) | id;
+        m_format = (m_format & ~MDTformatmask) | id;
     m_debugger->setMemoryFormat(m_format);
 
     // change the format in the cache
@@ -256,24 +256,24 @@ QString MemoryWindow::parseMemoryDumpLineToAscii(const QString& line, bool littl
     QString dumpAscii;
     for (const auto& hex: hexdata)
     {
-	bool ok;
-	unsigned long long parsedValue = hex.toULongLong(&ok, 16);
-	if (ok) {
-	    QByteArray dump;
-	    for (int s  = 0; s < len; s++)
-	    {
-		unsigned char b = parsedValue & 0xFF;
-		parsedValue >>= 8;
-		if (isprint(b)) {
-		    dump += b;
-		} else {
-		    dump += '.';
-		}
-	    }
-	    if (!littleendian)
-		std::reverse(dump.begin(), dump.end());
-	    dumpAscii += QString::fromLatin1(dump);
-	}
+        bool ok;
+        unsigned long long parsedValue = hex.toULongLong(&ok, 16);
+        if (ok) {
+            QByteArray dump;
+            for (int s  = 0; s < len; s++)
+            {
+                unsigned char b = parsedValue & 0xFF;
+                parsedValue >>= 8;
+                if (isprint(b)) {
+                    dump += b;
+                } else {
+                    dump += '.';
+                }
+            }
+            if (!littleendian)
+                std::reverse(dump.begin(), dump.end());
+            dumpAscii += QString::fromLatin1(dump);
+        }
     }
     return dumpAscii;
 }
@@ -283,12 +283,12 @@ void MemoryWindow::slotNewMemoryDump(const QString& msg, const std::list<MemoryD
     QFontMetrics fm(font());
 
     if (!msg.isEmpty()) {
-	for (int i = MAX_COL; i > 0; i--) {
-	    m_memory.setColumnHidden(i, true);
-	}
-	new QTreeWidgetItem(&m_memory, QStringList() << msg);
-	m_memory.header()->resizeSection(COL_ADDR, fm.horizontalAdvance(msg)+10);
-	return;
+        for (int i = MAX_COL; i > 0; i--) {
+            m_memory.setColumnHidden(i, true);
+        }
+        new QTreeWidgetItem(&m_memory, QStringList() << msg);
+        m_memory.header()->resizeSection(COL_ADDR, fm.horizontalAdvance(msg)+10);
+        return;
     }
 
     bool showDumpAscii = (m_format & MDTformatmask) == MDThex;
@@ -298,62 +298,62 @@ void MemoryWindow::slotNewMemoryDump(const QString& msg, const std::list<MemoryD
     // show only needed columns
     QStringList sl = md->dump.split( "\t" );
     for (int i = COL_DUMP_ASCII-1; i > 0; i--)
-	m_memory.setColumnHidden(i, i > sl.count());
+        m_memory.setColumnHidden(i, i > sl.count());
 
     m_memory.setColumnHidden(COL_DUMP_ASCII, !showDumpAscii);
 
     for (; md != memdump.end(); ++md)
     {
-	QString addr = md->address.asString() + " " + md->address.fnoffs;
-	QStringList sl = md->dump.split( "\t" );
+        QString addr = md->address.asString() + " " + md->address.fnoffs;
+        QStringList sl = md->dump.split( "\t" );
 
-	if (fm.horizontalAdvance(addr) > m_memoryColumnsWidth[COL_ADDR]) {
-	    m_memoryColumnsWidth[COL_ADDR] = fm.horizontalAdvance(addr);
-	}
+        if (fm.horizontalAdvance(addr) > m_memoryColumnsWidth[COL_ADDR]) {
+            m_memoryColumnsWidth[COL_ADDR] = fm.horizontalAdvance(addr);
+        }
 
-	QTreeWidgetItem* line = nullptr;
-	QList<QTreeWidgetItem*> items = m_memory.findItems(addr, Qt::MatchExactly, 0);
-	if (items.count() != 0) {
-	    line = items.at(0);
-	}
-	if (!line) {	 // line not found in memory view, append new one
-	    for (int i = 0; i < sl.count(); i++) {
-		if (fm.horizontalAdvance(sl[i]) > m_memoryColumnsWidth[i+1]) {
-		    m_memoryColumnsWidth[i+1] = fm.horizontalAdvance(sl[i]);
-		}
-	    }
+        QTreeWidgetItem* line = nullptr;
+        QList<QTreeWidgetItem*> items = m_memory.findItems(addr, Qt::MatchExactly, 0);
+        if (items.count() != 0) {
+            line = items.at(0);
+        }
+        if (!line) {         // line not found in memory view, append new one
+            for (int i = 0; i < sl.count(); i++) {
+                if (fm.horizontalAdvance(sl[i]) > m_memoryColumnsWidth[i+1]) {
+                    m_memoryColumnsWidth[i+1] = fm.horizontalAdvance(sl[i]);
+                }
+            }
 
-	    line = new QTreeWidgetItem(&m_memory, QStringList(addr) << sl);
-	    m_dumpLastAddr = md->address;
-	    if (md->endOfDump)
-		m_dumpMemRegionEnd = true;
-	} else {	// line found in memory view updated it
-	    for (int i = 0; i < sl.count(); i++) {
-		if (fm.horizontalAdvance(sl[i]) > m_memoryColumnsWidth[i+1]) {
-		    m_memoryColumnsWidth[i+1] = fm.horizontalAdvance(sl[i]);
-		}
-		bool changed = i < (line->columnCount() - showDumpAscii) && sl[i] != line->text(i+1);
-		line->setForeground(i+1, changed ? QBrush(QColor(Qt::red)) : palette().text());
-		line->setText(i+1, sl[i]);
-	    }
-	}
+            line = new QTreeWidgetItem(&m_memory, QStringList(addr) << sl);
+            m_dumpLastAddr = md->address;
+            if (md->endOfDump)
+                m_dumpMemRegionEnd = true;
+        } else {        // line found in memory view updated it
+            for (int i = 0; i < sl.count(); i++) {
+                if (fm.horizontalAdvance(sl[i]) > m_memoryColumnsWidth[i+1]) {
+                    m_memoryColumnsWidth[i+1] = fm.horizontalAdvance(sl[i]);
+                }
+                bool changed = i < (line->columnCount() - showDumpAscii) && sl[i] != line->text(i+1);
+                line->setForeground(i+1, changed ? QBrush(QColor(Qt::red)) : palette().text());
+                line->setText(i+1, sl[i]);
+            }
+        }
 
-	if (showDumpAscii) {
-	    QString dumpAscii = parseMemoryDumpLineToAscii(md->dump, md->littleendian);
-	    /*
-	     * Add space padding to have always same number of chars in all lines.
-	     * Workaround necessary to display correctly aligned when Qt::AlignRight.
-	     */
-	    int dumpAsciiFixedLen = ((m_format & MDTsizemask) == MDTbyte) ? 8:16;
-	    if (dumpAscii.size() < dumpAsciiFixedLen) {
-		dumpAscii += QString::asprintf("%*c", dumpAsciiFixedLen- dumpAscii.size(), ' ');
-	    }
-		line->setText(COL_DUMP_ASCII, dumpAscii);
-	    line->setTextAlignment(COL_DUMP_ASCII, Qt::AlignRight);
-	    if (fm.horizontalAdvance(dumpAscii) > m_memoryColumnsWidth[COL_DUMP_ASCII]) {
-		m_memoryColumnsWidth[COL_DUMP_ASCII] = fm.horizontalAdvance(dumpAscii);
-	    }
-	}
+        if (showDumpAscii) {
+            QString dumpAscii = parseMemoryDumpLineToAscii(md->dump, md->littleendian);
+            /*
+             * Add space padding to have always same number of chars in all lines.
+             * Workaround necessary to display correctly aligned when Qt::AlignRight.
+             */
+            int dumpAsciiFixedLen = ((m_format & MDTsizemask) == MDTbyte) ? 8:16;
+            if (dumpAscii.size() < dumpAsciiFixedLen) {
+                dumpAscii += QString::asprintf("%*c", dumpAsciiFixedLen- dumpAscii.size(), ' ');
+            }
+                line->setText(COL_DUMP_ASCII, dumpAscii);
+            line->setTextAlignment(COL_DUMP_ASCII, Qt::AlignRight);
+            if (fm.horizontalAdvance(dumpAscii) > m_memoryColumnsWidth[COL_DUMP_ASCII]) {
+                m_memoryColumnsWidth[COL_DUMP_ASCII] = fm.horizontalAdvance(dumpAscii);
+            }
+        }
     }
 
     // resize to longest string and add padding
@@ -380,21 +380,21 @@ void MemoryWindow::saveProgramSpecific(KConfigBase* config)
     QString exprEntry;
     QString fmtEntry;
     for (int i = 0; i < numEntries;) {
-	QString text = m_expression.itemText(i);
-	i++;				/* entries are counted 1-based */
-	exprEntry = QString::asprintf(ExpressionFmt, i);
-	fmtEntry = QString::asprintf(FormatFmt, i);
-	g.writeEntry(exprEntry, text);
-	QMap<QString,unsigned>::iterator pFormat = m_formatCache.find(text);
-	unsigned fmt = pFormat != m_formatCache.end()  ?  *pFormat  :  MDTword | MDThex;
-	g.writeEntry(fmtEntry, fmt);
+        QString text = m_expression.itemText(i);
+        i++;                                /* entries are counted 1-based */
+        exprEntry = QString::asprintf(ExpressionFmt, i);
+        fmtEntry = QString::asprintf(FormatFmt, i);
+        g.writeEntry(exprEntry, text);
+        QMap<QString,unsigned>::iterator pFormat = m_formatCache.find(text);
+        unsigned fmt = pFormat != m_formatCache.end()  ?  *pFormat  :  MDTword | MDThex;
+        g.writeEntry(fmtEntry, fmt);
     }
 
     // column widths
     QList<int> widths;
     for (int i = 0; i < 2; i++) {
-	int w = m_memory.columnWidth(i);
-	widths.append(w);
+        int w = m_memory.columnWidth(i);
+        widths.append(w);
     }
     g.writeEntry(ColumnWidths, widths);
 }
@@ -410,27 +410,27 @@ void MemoryWindow::restoreProgramSpecific(KConfigBase* config)
     QString fmtEntry;
     // entries are counted 1-based
     for (int i = 1; i <= numEntries; i++) {
-	exprEntry = QString::asprintf(ExpressionFmt, i);
-	fmtEntry = QString::asprintf(FormatFmt, i);
-	QString expr = g.readEntry(exprEntry, QString());
-	unsigned fmt = g.readEntry(fmtEntry, MDTword | MDThex);
-	m_expression.addItem(expr);
-	m_formatCache[expr] = fmt & (MDTsizemask | MDTformatmask);
+        exprEntry = QString::asprintf(ExpressionFmt, i);
+        fmtEntry = QString::asprintf(FormatFmt, i);
+        QString expr = g.readEntry(exprEntry, QString());
+        unsigned fmt = g.readEntry(fmtEntry, MDTword | MDThex);
+        m_expression.addItem(expr);
+        m_formatCache[expr] = fmt & (MDTsizemask | MDTformatmask);
     }
 
     // initialize with top expression
     if (numEntries > 0) {
-	m_expression.setCurrentIndex(0);
-	QString expr = m_expression.itemText(0);
-	m_format = m_formatCache[expr];
-	m_debugger->setMemoryFormat(m_format);
-	displayNewExpression(expr);
+        m_expression.setCurrentIndex(0);
+        QString expr = m_expression.itemText(0);
+        m_format = m_formatCache[expr];
+        m_debugger->setMemoryFormat(m_format);
+        displayNewExpression(expr);
     }
 
     // column widths
     QList<int> widths = g.readEntry(ColumnWidths, QList<int>());
     QList<int>::iterator w = widths.begin();
     for (int i = 0; i < 2 && w != widths.end(); ++i, ++w) {
-	m_memory.setColumnWidth(i, *w);
+        m_memory.setColumnWidth(i, *w);
     }
 }

@@ -22,12 +22,12 @@ static const char globarstr[] = "test";
 
 class Cl
 {
-	int k;
-	double l;
+        int k;
+        double l;
 public:
-	Cl(int r);
-	virtual ~Cl();
-	virtual int f(int x);
+        Cl(int r);
+        virtual ~Cl();
+        virtual int f(int x);
 };
 
 typedef void (*PtrFunc)(E*, char);
@@ -35,13 +35,13 @@ typedef void (*PtrFunc)(E*, char);
 class Dl : public Cl
 {
 public:
-	Dl(int r);
-	virtual int f(int x);
-	int operator()(const QString& x, int& y) const;
-	virtual operator const char*() const { return 0; }
-	operator PtrFunc*();
-	void takeACStr(const char* cstr);
-	double m;
+        Dl(int r);
+        virtual int f(int x);
+        int operator()(const QString& x, int& y) const;
+        virtual operator const char*() const { return 0; }
+        operator PtrFunc*();
+        void takeACStr(const char* cstr);
+        double m;
 };
 
 namespace A {
@@ -49,15 +49,15 @@ namespace {
 namespace B {
 namespace {
 namespace {
-	enum Depth { flat, shallow, deep };
+        enum Depth { flat, shallow, deep };
 void g()
 {
-	Depth d = shallow;
-	S s1, s2;
-	s1.x = 85;
-	s2.y = 17;
-	s1.s = &s2;
-	s2.s = &s1;
+        Depth d = shallow;
+        S s1, s2;
+        s1.x = 85;
+        s2.y = 17;
+        s1.s = &s2;
+        s2.s = &s1;
 }
 } // namespace
 void Banong() { g(); }
@@ -71,29 +71,29 @@ void g() { Aanong(); }
 
 void f(E e[3], char c)
 {
-	E x = e[2];
-	S y[2];
-	E* pe = e;
+        E x = e[2];
+        S y[2];
+        E* pe = e;
         E* pea[3] = { pe, };
-	{
-		int x = 17;
-		x;
-	}
-	A::g();
-	char buffer[300];
-	memset(buffer, 1, 300);
-	for (int i = 0; i < sizeof(buffer); i +=15) buffer[i] = '\02';
-	QDir dir;
-	QFile file;
-	QFileInfo fi;
-	x = red;
-	emptyBase eb;
-	emptyDerived ed;
-	emptyNested en;
-	int ea[3];
-	emptyVBase evb;
-	emptyVDerived evd;
-	emptyVNested evn;
+        {
+                int x = 17;
+                x;
+        }
+        A::g();
+        char buffer[300];
+        memset(buffer, 1, 300);
+        for (int i = 0; i < sizeof(buffer); i +=15) buffer[i] = '\02';
+        QDir dir;
+        QFile file;
+        QFileInfo fi;
+        x = red;
+        emptyBase eb;
+        emptyDerived ed;
+        emptyNested en;
+        int ea[3];
+        emptyVBase evb;
+        emptyVDerived evd;
+        emptyVNested evn;
 }
 
 void strtest(const char* t)
@@ -101,99 +101,99 @@ void strtest(const char* t)
     const char* s = t;
     const char*& s2 = s;
     if (t == 0)
-	strtest(s2);
+        strtest(s2);
     std::cout << s2 << std::endl;
 }
 
 template<typename F>
 void templated_strtest(F f, const char* t)
 {
-	// test <incomplete sequence> in various contexts
-	struct incomplete_seq_intern {
-		int val;
-		char is[4];
-		int val2;
-	};
-	struct incomplete_seq_end {
-		int val;
-		char is[4];
-	};
-	unsigned char a[4] = {',', 020, 021, 0325};
-	incomplete_seq_intern b = { 1, {',', 020, 021, char(0325)}, 2 };
-	incomplete_seq_end c = { 1, {',', 020, 021, char(0325)} };
-	unsigned char d[30][4] = { {',', 020, 021, 0325}, };
-	for (int i = 1; i < 30; i++)
-		memcpy(d[i], d[0], 4);
-	incomplete_seq_intern ba[30] = { { 1, {',', 020, 021, char(0325)}, 2 } };
-	incomplete_seq_end ca[30] = { { 1, {',', 020, 021, char(0325)} } };
+        // test <incomplete sequence> in various contexts
+        struct incomplete_seq_intern {
+                int val;
+                char is[4];
+                int val2;
+        };
+        struct incomplete_seq_end {
+                int val;
+                char is[4];
+        };
+        unsigned char a[4] = {',', 020, 021, 0325};
+        incomplete_seq_intern b = { 1, {',', 020, 021, char(0325)}, 2 };
+        incomplete_seq_end c = { 1, {',', 020, 021, char(0325)} };
+        unsigned char d[30][4] = { {',', 020, 021, 0325}, };
+        for (int i = 1; i < 30; i++)
+                memcpy(d[i], d[0], 4);
+        incomplete_seq_intern ba[30] = { { 1, {',', 020, 021, char(0325)}, 2 } };
+        incomplete_seq_end ca[30] = { { 1, {',', 020, 021, char(0325)} } };
 
-	f(t);
+        f(t);
 }
 
 void segFault()
 {
-	*(char*)0 = 's';
+        *(char*)0 = 's';
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc > 1) {
-		if (*argv[1] == 's') {
-			segFault();
-		} else if (*argv[1] == 'a') {
-			// let debugger attach
-			int junk;
-			std::cin >> junk;
-		}
-	}
+        if (argc > 1) {
+                if (*argv[1] == 's') {
+                        segFault();
+                } else if (*argv[1] == 'a') {
+                        // let debugger attach
+                        int junk;
+                        std::cin >> junk;
+                }
+        }
 
-	char a[6] = { 'a', 'B', '\'', '\"' };
-	char a1[1] = { '1' };
-	E e[3] = { red, green, blue };
-	E e1[1] = { yellow };
+        char a[6] = { 'a', 'B', '\'', '\"' };
+        char a1[1] = { '1' };
+        E e[3] = { red, green, blue };
+        E e1[1] = { yellow };
 
-	a[0] = '5';
-       	void (*pf[2])(E*, char) = {f};
-	{
-		double d[1] = { -1.234e123 };
-		int i = 10;
-		sin(i);
-	}
-	(*pf[0])(e, '\n');
+        a[0] = '5';
+               void (*pf[2])(E*, char) = {f};
+        {
+                double d[1] = { -1.234e123 };
+                int i = 10;
+                sin(i);
+        }
+        (*pf[0])(e, '\n');
 
-	QString s;
+        QString s;
 
-	s = "Hi, there!\r\n\t\"\'\\";
+        s = "Hi, there!\r\n\t\"\'\\";
 
-	const QString& strref = s;
+        const QString& strref = s;
 
-	templated_strtest(strtest, s.toLatin1());
-	s = "asbcxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-	strtest(s.toLatin1());
-	s += "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
-	strtest(s.toLatin1());
-	s += "rst";
-	strtest(s.toLatin1());
-	s = "xxxxxxxxxxxxxxxxxxxxxxxxxxx";
-	strtest(s.toLatin1());
-	s += "rst";
-	strtest(s.toLatin1());
-	s = "";
+        templated_strtest(strtest, s.toLatin1());
+        s = "asbcxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        strtest(s.toLatin1());
+        s += "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+        strtest(s.toLatin1());
+        s += "rst";
+        strtest(s.toLatin1());
+        s = "xxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        strtest(s.toLatin1());
+        s += "rst";
+        strtest(s.toLatin1());
+        s = "";
 
-	Cl c1(13);
-	Dl d1(3214);
-	d1.f(17);
-	int n = 83;
-	d1(strref, n);
-	PtrFunc* ppf = d1;
-	const char* (Dl::*pmf)() const = &Dl::operator const char*;
-	double (Dl::*pmv) = &Dl::m;
-	d1.takeACStr(globarstr);
+        Cl c1(13);
+        Dl d1(3214);
+        d1.f(17);
+        int n = 83;
+        d1(strref, n);
+        PtrFunc* ppf = d1;
+        const char* (Dl::*pmf)() const = &Dl::operator const char*;
+        double (Dl::*pmv) = &Dl::m;
+        d1.takeACStr(globarstr);
 }
 
 Cl::Cl(int r) :
-	k(r),
-	l(sin(r))
+        k(r),
+        l(sin(r))
 {
     std::cout << l << std::endl;
 }
@@ -204,25 +204,25 @@ Cl::~Cl()
 
 int Cl::f(int x)
 {
-	int y = 2*x;
-	return y;
+        int y = 2*x;
+        return y;
 }
 
 Dl::Dl(int r) :
-	Cl(r)
+        Cl(r)
 {
 }
 
 int Dl::f(int x)
 {
-	int y = Cl::f(x);
-	return y+3;
+        int y = Cl::f(x);
+        return y+3;
 }
 
 int Dl::operator()(const QString& x, int& y) const
 {
-	std::cerr << "ha! I know!" << std::endl;
-	return 1;
+        std::cerr << "ha! I know!" << std::endl;
+        return 1;
 }
 
 Dl::operator PtrFunc*()
@@ -232,5 +232,5 @@ Dl::operator PtrFunc*()
 
 void Dl::takeACStr(const char* cstr)
 {
-	const char filespec[20] = "more test";
+        const char filespec[20] = "more test";
 }

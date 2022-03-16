@@ -43,67 +43,67 @@ bool operator>(const DbgAddr& a1, const DbgAddr& a2);
 
 
 enum DbgCommand {
-	DCinitialize,
-	DCtty,
-	DCexecutable,
-	DCtargetremote,
-	DCcorefile,
-	DCattach,
-	DCinfolinemain,
-	DCinfolocals,
-	DCinforegisters,
-	DCexamine,
-	DCinfoline,
-	DCinfotarget,
-	DCdisassemble,
-	DCsetdisassflavor,
-	DCsetargs,
-	DCsetenv,
-	DCunsetenv,
-	DCsetoption,                    /* debugger options */
-	DCcd,
-	DCbt,
-	DCrun,
-	DCcont,
-	DCstep,
-	DCstepi,
-	DCnext,
-	DCnexti,
-	DCfinish,
-	DCuntil,			/* line number is zero-based! */
-	DCkill,
-	DCdetach,
-	DCbreaktext,
-	DCbreakline,			/* line number is zero-based! */
-	DCtbreakline,			/* line number is zero-based! */
-	DCbreakaddr,
-	DCtbreakaddr,
-	DCwatchpoint,
-	DCdelete,
-	DCenable,
-	DCdisable,
-	DCprint,
-	DCprintDeref,
-	DCprintStruct,
-	DCprintQStringStruct,
-	DCprintPopup,
-	DCframe,
-	DCfindType,
-	DCinfosharedlib,
-	DCthread,
-	DCinfothreads,
-	DCinfobreak,
-	DCcondition,
-	DCsetpc,
-	DCignore,
-	DCprintWChar,
-	DCsetvariable
+        DCinitialize,
+        DCtty,
+        DCexecutable,
+        DCtargetremote,
+        DCcorefile,
+        DCattach,
+        DCinfolinemain,
+        DCinfolocals,
+        DCinforegisters,
+        DCexamine,
+        DCinfoline,
+        DCinfotarget,
+        DCdisassemble,
+        DCsetdisassflavor,
+        DCsetargs,
+        DCsetenv,
+        DCunsetenv,
+        DCsetoption,                    /* debugger options */
+        DCcd,
+        DCbt,
+        DCrun,
+        DCcont,
+        DCstep,
+        DCstepi,
+        DCnext,
+        DCnexti,
+        DCfinish,
+        DCuntil,                        /* line number is zero-based! */
+        DCkill,
+        DCdetach,
+        DCbreaktext,
+        DCbreakline,                        /* line number is zero-based! */
+        DCtbreakline,                        /* line number is zero-based! */
+        DCbreakaddr,
+        DCtbreakaddr,
+        DCwatchpoint,
+        DCdelete,
+        DCenable,
+        DCdisable,
+        DCprint,
+        DCprintDeref,
+        DCprintStruct,
+        DCprintQStringStruct,
+        DCprintPopup,
+        DCframe,
+        DCfindType,
+        DCinfosharedlib,
+        DCthread,
+        DCinfothreads,
+        DCinfobreak,
+        DCcondition,
+        DCsetpc,
+        DCignore,
+        DCprintWChar,
+        DCsetvariable
 };
 
 enum RunDevNull {
-    RDNstdin = 0x1,			/* redirect stdin to /dev/null */
-    RDNstdout = 0x2,			/* redirect stdout to /dev/null */
-    RDNstderr = 0x4			/* redirect stderr to /dev/null */
+    RDNstdin = 0x1,                        /* redirect stdin to /dev/null */
+    RDNstdout = 0x2,                        /* redirect stdout to /dev/null */
+    RDNstderr = 0x4                        /* redirect stderr to /dev/null */
 };
 
 /**
@@ -146,7 +146,7 @@ struct CmdQueueItem
 {
     DbgCommand m_cmd;
     QString m_cmdString;
-    bool m_committed;			/* just a debugging aid */
+    bool m_committed;                        /* just a debugging aid */
     // remember which expression when printing an expression
     VarTree* m_expr;
     ExprWnd* m_exprWnd;
@@ -163,23 +163,23 @@ struct CmdQueueItem
     QString m_popupExpr;
 
     CmdQueueItem(DbgCommand cmd, const QString& str) :
-    	m_cmd(cmd),
-	m_cmdString(str),
-	m_committed(false),
-	m_expr(0),
-	m_exprWnd(0),
-	m_lineNo(0),
-	m_brkpt(0),
-	m_existingBrkpt(0),
-	m_byUser(false)
+            m_cmd(cmd),
+        m_cmdString(str),
+        m_committed(false),
+        m_expr(0),
+        m_exprWnd(0),
+        m_lineNo(0),
+        m_brkpt(0),
+        m_existingBrkpt(0),
+        m_byUser(false)
     { }
 
     struct IsEqualCmd
     {
-	IsEqualCmd(DbgCommand cmd, const QString& str) : m_cmd(cmd), m_str(str) { }
-	bool operator()(CmdQueueItem*) const;
-	DbgCommand m_cmd;
-	const QString& m_str;
+        IsEqualCmd(DbgCommand cmd, const QString& str) : m_cmd(cmd), m_str(str) { }
+        bool operator()(CmdQueueItem*) const;
+        DbgCommand m_cmd;
+        const QString& m_str;
     };
 };
 
@@ -189,21 +189,21 @@ struct CmdQueueItem
  */
 struct Breakpoint
 {
-    int id;				/* gdb's number */
+    int id;                                /* gdb's number */
     enum Type {
-	breakpoint, watchpoint 
+        breakpoint, watchpoint 
     } type;
     bool temporary;
     bool enabled;
     QString location;
-    QString text;			/* text if set using DCbreaktext */
-    DbgAddr address;			/* exact address of breakpoint */
-    QString condition;			/* condition as printed by gdb */
-    int ignoreCount;			/* ignore next that may hits */
-    int hitCount;			/* as reported by gdb */
+    QString text;                        /* text if set using DCbreaktext */
+    DbgAddr address;                        /* exact address of breakpoint */
+    QString condition;                        /* condition as printed by gdb */
+    int ignoreCount;                        /* ignore next that may hits */
+    int hitCount;                        /* as reported by gdb */
     // the following items repeat the location, but in a better usable way
     QString fileName;
-    int lineNo;				/* zero-based line number */
+    int lineNo;                                /* zero-based line number */
     Breakpoint();
     bool isOrphaned() const { return id < 0; }
 };
@@ -214,8 +214,8 @@ struct Breakpoint
 struct FrameInfo
 {
     QString fileName;
-    int lineNo;				/* zero-based line number */
-    DbgAddr address;			/* exact address of PC */
+    int lineNo;                                /* zero-based line number */
+    DbgAddr address;                        /* exact address of PC */
 };
 
 /**
@@ -224,7 +224,7 @@ struct FrameInfo
 struct StackFrame : FrameInfo
 {
     int frameNo;
-    ExprValue* var;			/* more information if non-zero */
+    ExprValue* var;                        /* more information if non-zero */
     StackFrame() : var(0) { }
     ~StackFrame();
 };
@@ -234,10 +234,10 @@ struct StackFrame : FrameInfo
  */
 struct ThreadInfo : FrameInfo
 {
-    int id;				/* gdb's number */
-    QString threadName;			/* the SYSTAG */
-    QString function;			/* where thread is halted */
-    bool hasFocus;			/* the thread whose stack we are watching */
+    int id;                                /* gdb's number */
+    QString threadName;                        /* the SYSTAG */
+    QString function;                        /* where thread is halted */
+    bool hasFocus;                        /* the thread whose stack we are watching */
 };
 
 /**
@@ -247,8 +247,8 @@ struct RegisterInfo
 {
     QString regName;
     QString rawValue;
-    QString cookedValue;		/* may be empty */
-    QString type;			/* of vector register if not empty */
+    QString cookedValue;                /* may be empty */
+    QString type;                        /* of vector register if not empty */
 };
 
 /**
@@ -304,12 +304,12 @@ protected:
     QString m_runCmd;
     
     enum DebuggerState {
-	DSidle,				/* gdb waits for input */
-	DSinterrupted,			/* a command was interrupted */
-	DSrunningLow,			/* gdb is running a low-priority command */
-	DSrunning,			/* gdb waits for program */
-	DScommandSent,			/* command has been sent, we wait for wroteStdin signal */
-	DScommandSentLow		/* low-prioritycommand has been sent */
+        DSidle,                                /* gdb waits for input */
+        DSinterrupted,                        /* a command was interrupted */
+        DSrunningLow,                        /* gdb is running a low-priority command */
+        DSrunning,                        /* gdb waits for program */
+        DScommandSent,                        /* command has been sent, we wait for wroteStdin signal */
+        DScommandSentLow                /* low-prioritycommand has been sent */
     };
     DebuggerState m_state;
 
@@ -321,8 +321,8 @@ public:
     bool canExecuteImmediately() const { return m_hipriCmdQueue.empty(); }
 
 protected:
-    QByteArray m_output;		// normal gdb output
-    std::queue<QByteArray> m_delayedOutput;	// output colleced before signal bytesWritten() arrived
+    QByteArray m_output;                // normal gdb output
+    std::queue<QByteArray> m_delayedOutput;        // output colleced before signal bytesWritten() arrived
 
 public:
     /**
@@ -333,20 +333,20 @@ public:
     template<class... ARGS>
     CmdQueueItem* executeCmd(DbgCommand cmd, ARGS&&... args)
     {
-	return executeCmdString(cmd,
-			makeCmdString(cmd, std::forward<ARGS>(args)...), false);
+        return executeCmdString(cmd,
+                        makeCmdString(cmd, std::forward<ARGS>(args)...), false);
     }
     template<class... ARGS>
     CmdQueueItem* executeCmdOnce(DbgCommand cmd, ARGS&&... args)
     {
-	return executeCmdString(cmd,
-			makeCmdString(cmd, std::forward<ARGS>(args)...), true);
+        return executeCmdString(cmd,
+                        makeCmdString(cmd, std::forward<ARGS>(args)...), true);
     }
 
     enum QueueMode {
-	QMnormal,			/* queues the command last */
-	QMoverride,			/* removes an already queued command */
-	QMoverrideMoreEqual		/* ditto, also puts the command first in the queue */
+        QMnormal,                        /* queues the command last */
+        QMoverride,                        /* removes an already queued command */
+        QMoverrideMoreEqual                /* ditto, also puts the command first in the queue */
     };
 
     /**
@@ -357,8 +357,8 @@ public:
     template<class... ARGS>
     CmdQueueItem* queueCmdAgain(DbgCommand cmd, ARGS&&... args)
     {
-	return queueCmdString(cmd,
-			makeCmdString(cmd, std::forward<ARGS>(args)...), QMnormal);
+        return queueCmdString(cmd,
+                        makeCmdString(cmd, std::forward<ARGS>(args)...), QMnormal);
     }
 
     /**
@@ -368,8 +368,8 @@ public:
     template<class... ARGS>
     CmdQueueItem* queueCmd(DbgCommand cmd, ARGS&&... args)
     {
-	return queueCmdString(cmd,
-			makeCmdString(cmd, std::forward<ARGS>(args)...), QMoverride);
+        return queueCmdString(cmd,
+                        makeCmdString(cmd, std::forward<ARGS>(args)...), QMoverride);
     }
 
     /**
@@ -380,8 +380,8 @@ public:
     template<class... ARGS>
     CmdQueueItem* queueCmdPrio(DbgCommand cmd, ARGS&&... args)
     {
-	return queueCmdString(cmd,
-			makeCmdString(cmd, std::forward<ARGS>(args)...), QMoverrideMoreEqual);
+        return queueCmdString(cmd,
+                        makeCmdString(cmd, std::forward<ARGS>(args)...), QMoverrideMoreEqual);
     }
 
    /**
@@ -431,7 +431,7 @@ public:
      * output values are undefined in this case.
      */
     virtual bool parseFrameChange(const char* output, int& frameNo,
-				  QString& file, int& lineNo, DbgAddr& address) = 0;
+                                  QString& file, int& lineNo, DbgAddr& address) = 0;
 
     /**
      * Parses a list of breakpoints.
@@ -462,7 +462,7 @@ public:
      * @return False if there was no breakpoint.
      */
     virtual bool parseBreakpoint(const char* output, int& id,
-				 QString& file, int& lineNo, QString& address) = 0;
+                                 QString& file, int& lineNo, QString& address) = 0;
 
     /**
      * Parses the output of the DCinfolocals command.
@@ -503,10 +503,10 @@ public:
     virtual bool parseCoreFile(const char* output) = 0;
 
     enum StopFlags {
-	SFrefreshSource = 1,		/* refresh of source code is needed */
-	SFrefreshBreak = 2,		/* refresh breakpoints */
-	SFrefreshThreads = 4,		/* refresh thread list */
-	SFprogramActive = 128		/* program remains active */
+        SFrefreshSource = 1,                /* refresh of source code is needed */
+        SFrefreshBreak = 2,                /* refresh breakpoints */
+        SFrefreshThreads = 4,                /* refresh thread list */
+        SFprogramActive = 128                /* program remains active */
     };
     /**
      * Parses the output of commands that execute (a piece of) the program.
@@ -515,7 +515,7 @@ public:
      * @return The inclusive OR of zero or more of the StopFlags.
      */
     virtual uint parseProgramStopped(const char* output, bool haveCoreFile,
-				     QString& message) = 0;
+                                     QString& message) = 0;
 
     /**
      * Parses the output of the DCsharedlibs command.
@@ -538,7 +538,7 @@ public:
      * two addresses could not be found.
      */
     virtual bool parseInfoLine(const char* output,
-			       QString& addrFrom, QString& addrTo) = 0;
+                               QString& addrFrom, QString& addrTo) = 0;
 
     /**
      * Parse the output of the DCinfotarget command.
@@ -591,13 +591,13 @@ protected:
      * low-priority queue.
      */
     CmdQueueItem* queueCmdString(DbgCommand cmd, QString cmdString,
-				 QueueMode mode);
+                                 QueueMode mode);
     /**
      * Helper function that queues the given command string in the
      * high-priority queue.
      */
     CmdQueueItem* executeCmdString(DbgCommand cmd, QString cmdString,
-				   bool clearLow);
+                                   bool clearLow);
     void writeCommand();
     virtual void commandFinished(CmdQueueItem* cmd) = 0;
     virtual QString makeCmdString(DbgCommand cmd) = 0;

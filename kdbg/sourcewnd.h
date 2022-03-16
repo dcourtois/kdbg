@@ -87,8 +87,8 @@ signals:
     void clickedLeft(const QString&, int, const DbgAddr& address, bool);
     void clickedMid(const QString&, int, const DbgAddr& address);
     void disassemble(const QString&, int);
-    void expanded(int lineNo);		/* source lineNo has been expanded */
-    void collapsed(int lineNo);		/* source lineNo has been collapsed */
+    void expanded(int lineNo);                /* source lineNo has been expanded */
+    void collapsed(int lineNo);                /* source lineNo has been collapsed */
 public slots:
     void setTabWidth(int numChars);
     void cursorChanged();
@@ -96,35 +96,35 @@ public slots:
 protected:
     QString m_fileName;
     enum LineItem { liPC = 1, liPCup = 2,
-	liBP = 4, liBPdisabled = 8, liBPtemporary = 16,
-	liBPconditional = 32, liBPorphan = 64,
-	liBPany = liBP|liBPdisabled|liBPtemporary|liBPconditional|liBPorphan
+        liBP = 4, liBPdisabled = 8, liBPtemporary = 16,
+        liBPconditional = 32, liBPorphan = 64,
+        liBPany = liBP|liBPdisabled|liBPtemporary|liBPconditional|liBPorphan
     };
 
     struct SourceLine {
-	std::vector<QString> disass;		/* its disassembled code */
-	std::vector<DbgAddr> disassAddr;	/* the addresses thereof */
-	bool canDisass;			/* if line can be disassembled */
-	SourceLine() : canDisass(true) { }
-	int findAddressRowOffset(const DbgAddr& address) const;
+        std::vector<QString> disass;                /* its disassembled code */
+        std::vector<DbgAddr> disassAddr;        /* the addresses thereof */
+        bool canDisass;                        /* if line can be disassembled */
+        SourceLine() : canDisass(true) { }
+        int findAddressRowOffset(const DbgAddr& address) const;
     };
     std::vector<SourceLine> m_sourceCode;
     HighlightCpp* m_highlighter;
 
-    std::vector<int> m_rowToLine;	//!< The source line number for each row
-    std::vector<uchar> m_lineItems;	//!< Icons displayed on the line
-    std::vector<int> m_expandedLines;	//!< Keep track of expanded line numbers
-    QPixmap m_pcinner;			/* PC at innermost frame */
-    QPixmap m_pcup;			/* PC at frame up the stack */
-    QPixmap m_brkena;			/* enabled breakpoint */
-    QPixmap m_brkdis;			/* disabled breakpoint */
-    QPixmap m_brktmp;			/* temporary breakpoint marker */
-    QPixmap m_brkcond;			/* conditional breakpoint marker */
-    QPixmap m_brkorph;			/* orphaned breakpoint marker */
-    QFont m_lineNoFont;			//!< The font used to draw line numbers
-    int m_widthItems;			//!< The width of the item column
-    int m_widthPlus;			//!< The width of the expander column
-    int m_widthLineNo;			//!< The width of the line number columns
+    std::vector<int> m_rowToLine;        //!< The source line number for each row
+    std::vector<uchar> m_lineItems;        //!< Icons displayed on the line
+    std::vector<int> m_expandedLines;        //!< Keep track of expanded line numbers
+    QPixmap m_pcinner;                        /* PC at innermost frame */
+    QPixmap m_pcup;                        /* PC at frame up the stack */
+    QPixmap m_brkena;                        /* enabled breakpoint */
+    QPixmap m_brkdis;                        /* disabled breakpoint */
+    QPixmap m_brktmp;                        /* temporary breakpoint marker */
+    QPixmap m_brkcond;                        /* conditional breakpoint marker */
+    QPixmap m_brkorph;                        /* orphaned breakpoint marker */
+    QFont m_lineNoFont;                        //!< The font used to draw line numbers
+    int m_widthItems;                        //!< The width of the item column
+    int m_widthPlus;                        //!< The width of the expander column
+    int m_widthLineNo;                        //!< The width of the line number columns
     LineInfoArea* m_lineInfoArea;
 
     friend class LineInfoArea;

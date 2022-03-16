@@ -11,11 +11,11 @@
   <xsl:template match="/">
         <xsl:apply-templates/>
         <xsl:apply-templates mode="testMode"/>
-	<xsl:apply-templates mode="xsl:testMode"/>
-	<xsl:call-template name="test1"/>
-	<xsl:call-template name="test2"/>
-	<xsl:call-template name="xsl:test1"/>
-	<xsl:call-template name="xsl:test2"/>
+        <xsl:apply-templates mode="xsl:testMode"/>
+        <xsl:call-template name="test1"/>
+        <xsl:call-template name="test2"/>
+        <xsl:call-template name="xsl:test1"/>
+        <xsl:call-template name="xsl:test2"/>
   </xsl:template>
 
   <xsl:template match="html">

@@ -19,13 +19,13 @@ public:
     ThreadEntry(QTreeWidget* parent, const ThreadInfo& thread);
     void setFunction(const QString& func);
 
-    bool m_delete;			/* used for updating the list */
+    bool m_delete;                        /* used for updating the list */
 };
 
 ThreadEntry::ThreadEntry(QTreeWidget* parent, const ThreadInfo& thread) :
-	QTreeWidgetItem(parent, QStringList() << thread.threadName << thread.function),
-	ThreadInfo(thread),
-	m_delete(false)
+        QTreeWidgetItem(parent, QStringList() << thread.threadName << thread.function),
+        ThreadInfo(thread),
+        m_delete(false)
 {
 }
 
@@ -37,7 +37,7 @@ void ThreadEntry::setFunction(const QString& func)
 
 
 ThreadList::ThreadList(QWidget* parent) :
-	QTreeWidget(parent)
+        QTreeWidget(parent)
 {
     setHeaderLabels(QStringList() << i18n("Thread ID") << i18n("Location"));
     header()->setSectionResizeMode(1, QHeaderView::Interactive);
@@ -48,7 +48,7 @@ ThreadList::ThreadList(QWidget* parent) :
     makeNoFocusIcon();
 
     connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-	    this, SLOT(slotCurrentChanged(QTreeWidgetItem*)));
+            this, SLOT(slotCurrentChanged(QTreeWidgetItem*)));
 }
 
 ThreadList::~ThreadList()
@@ -59,31 +59,31 @@ void ThreadList::updateThreads(const std::list<ThreadInfo>& threads)
 {
     // reset flag in all items
     for (QTreeWidgetItemIterator i(this); *i; ++i)
-	static_cast<ThreadEntry*>(*i)->m_delete = true;
+        static_cast<ThreadEntry*>(*i)->m_delete = true;
 
     for (std::list<ThreadInfo>::const_iterator i = threads.begin(); i != threads.end(); ++i)
     {
-	// look up this thread by id
-	ThreadEntry* te = threadById(i->id);
-	if (te == 0) {
-	    te = new ThreadEntry(this, *i);
-	} else {
-	    te->m_delete = false;
-	    te->setFunction(i->function);
-	}
-	// set focus icon
-	te->hasFocus = i->hasFocus;
-	te->setIcon(0, i->hasFocus  ?  QIcon(m_focusIcon)  :  QIcon(m_noFocusIcon));
+        // look up this thread by id
+        ThreadEntry* te = threadById(i->id);
+        if (te == 0) {
+            te = new ThreadEntry(this, *i);
+        } else {
+            te->m_delete = false;
+            te->setFunction(i->function);
+        }
+        // set focus icon
+        te->hasFocus = i->hasFocus;
+        te->setIcon(0, i->hasFocus  ?  QIcon(m_focusIcon)  :  QIcon(m_noFocusIcon));
     }
 
     // delete all entries that have not been seen
     for (QTreeWidgetItemIterator i(this); *i;)
     {
-	ThreadEntry* te = static_cast<ThreadEntry*>(*i);
-	++i;		// step ahead before deleting it ;-)
-	if (te->m_delete) {
-	    delete te;
-	}
+        ThreadEntry* te = static_cast<ThreadEntry*>(*i);
+        ++i;                // step ahead before deleting it ;-)
+        if (te->m_delete) {
+            delete te;
+        }
     }
 }
 
@@ -91,10 +91,10 @@ ThreadEntry* ThreadList::threadById(int id)
 {
     for (QTreeWidgetItemIterator i(this); *i; ++i)
     {
-	ThreadEntry* te = static_cast<ThreadEntry*>(*i);
-	if (te->id == id) {
-	    return te;
-	}
+        ThreadEntry* te = static_cast<ThreadEntry*>(*i);
+        if (te->id == id) {
+            return te;
+        }
     }
     return 0;
 }
@@ -107,8 +107,8 @@ void ThreadList::makeNoFocusIcon()
 {
     m_noFocusIcon = m_focusIcon;
     {
-	QPainter p(&m_noFocusIcon);
-	p.fillRect(0,0, m_noFocusIcon.width(),m_noFocusIcon.height(), QColor(Qt::white));
+        QPainter p(&m_noFocusIcon);
+        p.fillRect(0,0, m_noFocusIcon.width(),m_noFocusIcon.height(), QColor(Qt::white));
     }
     m_noFocusIcon.setMask(m_noFocusIcon.createHeuristicMask());
 }
@@ -116,13 +116,13 @@ void ThreadList::makeNoFocusIcon()
 void ThreadList::slotCurrentChanged(QTreeWidgetItem* newItem)
 {
     if (newItem == 0)
-	return;
+        return;
 
     ThreadEntry* te = static_cast<ThreadEntry*>(newItem);
 
     // change the focused thread
     if (te->hasFocus)
-	return;
+        return;
 
     emit setThread(te->id);
 }

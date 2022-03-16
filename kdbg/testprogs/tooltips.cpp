@@ -44,11 +44,11 @@ namespace inner {
             g_i += i + inner::g_i + ::S::f;
         }
 
-	C  c;
-	C *pc = &c;
+        C  c;
+        C *pc = &c;
 
-	int i1 = c.get_i();
-	i1 = pc->get_i();
+        int i1 = c.get_i();
+        i1 = pc->get_i();
     }
 }
 

@@ -23,18 +23,18 @@ class VarTree : public QTreeWidgetItem
 {
 public:
     enum VarKind { VKsimple, VKpointer, VKstruct, VKarray,
-	VKdummy				//!< used to update only children
+        VKdummy                                //!< used to update only children
     };
     VarKind m_varKind;
     enum NameKind { NKplain, NKstatic, NKtype,
-	NKanonymous,			//!< an anonymous struct or union
-	NKaddress			//!< a dereferenced pointer
+        NKanonymous,                        //!< an anonymous struct or union
+        NKaddress                        //!< a dereferenced pointer
     };
     NameKind m_nameKind;
-    const TypeInfo* m_type;			//!< the type of struct if it could be derived
-    int m_exprIndex;			//!< used in struct value update
-    bool m_exprIndexUseGuard;		//!< ditto; if guard expr should be used
-    QString m_partialValue;		//!< while struct value update is in progress
+    const TypeInfo* m_type;                        //!< the type of struct if it could be derived
+    int m_exprIndex;                        //!< used in struct value update
+    bool m_exprIndexUseGuard;                //!< ditto; if guard expr should be used
+    QString m_partialValue;                //!< while struct value update is in progress
 
     VarTree(VarTree* parent, ExprValue* v);
     VarTree(ExprWnd* parent, ExprValue* v);
@@ -67,8 +67,8 @@ public:
 
 private:
     void updateValueText();
-    QString m_baseValue;	//!< The "normal value" that the driver reported
-    QString m_structValue;	//!< The "quick member" value
+    QString m_baseValue;        //!< The "normal value" that the driver reported
+    QString m_structValue;        //!< The "quick member" value
     bool m_baseChanged : 1;
     bool m_structChanged : 1;
 };
@@ -82,8 +82,8 @@ struct ExprValue
     QString m_value;
     VarTree::VarKind m_varKind;
     VarTree::NameKind m_nameKind;
-    ExprValue* m_child;			/* the first child expression */
-    ExprValue* m_next;			/* the next sibling expression */
+    ExprValue* m_child;                        /* the first child expression */
+    ExprValue* m_next;                        /* the next sibling expression */
     bool m_initiallyExpanded;
 
     ExprValue(const QString& name, VarTree::NameKind kind);
@@ -167,9 +167,9 @@ protected:
     static QString formatWCharPointer(QString value);
     QPixmap m_pixPointer;
 
-    std::list<VarTree*> m_updatePtrs;	//!< dereferenced pointers that need update
-    std::list<VarTree*> m_updateType;	//!< structs whose type must be determined
-    std::list<VarTree*> m_updateStruct;	//!< structs whose nested value needs update
+    std::list<VarTree*> m_updatePtrs;        //!< dereferenced pointers that need update
+    std::list<VarTree*> m_updateType;        //!< structs whose type must be determined
+    std::list<VarTree*> m_updateStruct;        //!< structs whose nested value needs update
 
     ValueEdit* m_edit;
 

@@ -165,11 +165,11 @@ they are not completed.</para>
 </body>
     <usage>
       <li>
-	<text>stepup </text>
-	<comment>(step up one frame)</comment></li>
+        <text>stepup </text>
+        <comment>(step up one frame)</comment></li>
       <li>
-	<text>stepup &lt;NUMBER_OF_FRAMES&gt; </text>
-	<comment>(step up specified number of frames)</comment>
+        <text>stepup &lt;NUMBER_OF_FRAMES&gt; </text>
+        <comment>(step up specified number of frames)</comment>
       </li>
     </usage>
 </cmd>
@@ -181,12 +181,12 @@ they are not completed.</para>
 </body>
     <usage>
       <li>
-	<text>stepdown </text>
-	<comment>(step down one frame)</comment>
+        <text>stepdown </text>
+        <comment>(step down one frame)</comment>
       </li>
       <li>
-	<text>stepdown &lt;NUMBER_OF_FRAMES&gt;</text>
-	<comment>(step down specified number of frames)</comment>
+        <text>stepdown &lt;NUMBER_OF_FRAMES&gt;</text>
+        <comment>(step down specified number of frames)</comment>
       </li>
     </usage>
 </cmd>
@@ -330,19 +330,19 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 </body>
 <usage>
 <li>
-	<text>break -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
+        <text>break -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
 </li>
 <li>
-	<text>break &lt;TEMPLATENAME&gt;</text>
-	<comment>(To break at named template.)</comment>
+        <text>break &lt;TEMPLATENAME&gt;</text>
+        <comment>(To break at named template.)</comment>
 </li>
 <li>
-	<text>break *</text>
-	<comment>(To break at any template found.)</comment>
+        <text>break *</text>
+        <comment>(To break at any template found.)</comment>
 </li>
 <li>
-	<text>break </text>
-	<comment>(To break point at current node. Yes that includes xml data nodes!)</comment>
+        <text>break </text>
+        <comment>(To break point at current node. Yes that includes xml data nodes!)</comment>
 </li>
 </usage>
 </cmd>
@@ -365,24 +365,24 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 </body>
 <usage>
 <li>
-	<text>delete</text>
-	<comment>(To delete breakpoint at current node)</comment>
+        <text>delete</text>
+        <comment>(To delete breakpoint at current node)</comment>
 </li>
 <li>
-	<text>delete   &lt;BREAKPOINT_ID&gt;</text>
-	<comment>(To delete breakpoint at specified break point number)</comment>
+        <text>delete   &lt;BREAKPOINT_ID&gt;</text>
+        <comment>(To delete breakpoint at specified break point number)</comment>
 </li>
 <li>
-	<text>delete -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
-	<comment>(Delete at specifed file, line number)</comment>
+        <text>delete -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
+        <comment>(Delete at specifed file, line number)</comment>
 </li>
 <li>
-	<text>delete &lt;TEMMPLATENAME&gt;</text>
-	<comment>(To delete break point at named template.)</comment>
+        <text>delete &lt;TEMMPLATENAME&gt;</text>
+        <comment>(To delete break point at named template.)</comment>
 </li>
 <li>
-	<text>delete *</text>
-	<comment>(To delete all break points.)</comment>
+        <text>delete *</text>
+        <comment>(To delete all break points.)</comment>
 </li>
 </usage>
 </cmd>
@@ -394,16 +394,16 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 </body>
 <usage>
 <li>
-	<text>enable</text>
-	<comment>(To enable/disable breakpoint at current node)</comment>
+        <text>enable</text>
+        <comment>(To enable/disable breakpoint at current node)</comment>
 </li>
 <li>
-	<text>enable   &lt;BREAKPOINT_ID&gt;</text>
-	<comment>(To enable/disable breakpoint at specified break point number</comment>
+        <text>enable   &lt;BREAKPOINT_ID&gt;</text>
+        <comment>(To enable/disable breakpoint at specified break point number</comment>
 </li>
 <li>
-	<text>enable -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
-	<comment>(Enable/disable breakpoint at specifed file, line number)</comment>
+        <text>enable -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
+        <comment>(Enable/disable breakpoint at specifed file, line number)</comment>
 </li>
 </usage>
 </cmd>
@@ -412,16 +412,16 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 <summary>Disable a breakpoint</summary>
 <usage>
 <li>
-	<text>disable</text>
-	<comment>(To disable breakpoint at current node)</comment>
+        <text>disable</text>
+        <comment>(To disable breakpoint at current node)</comment>
 </li>
 <li>
-	<text>disable   &lt;BREAKPOINT_ID&gt;</text>
-	<comment>(To disable breakpoint at specified break point number</comment>
+        <text>disable   &lt;BREAKPOINT_ID&gt;</text>
+        <comment>(To disable breakpoint at specified break point number</comment>
 </li>
 <li>
-	<text>disable -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
-	<comment>(Disable breakpoint at specifed file, line number)</comment>
+        <text>disable -l &lt;FILENAME&gt; &lt;LINENO&gt;</text>
+        <comment>(Disable breakpoint at specifed file, line number)</comment>
 </li>
 </usage>
 </cmd>
@@ -498,12 +498,12 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 <summary>Print a list of global stylesheet variables or parameters. Print the value of a global variable</summary>
 <usage>
 <li>
-	<text>globals</text>
-	<comment>(Print list of all globaly available variables)</comment>
+        <text>globals</text>
+        <comment>(Print list of all globaly available variables)</comment>
 </li>
 <li>
-	<text>globals &lt;QNAME&gt;</text>
-	<comment>(Print the value of variable specified)</comment>
+        <text>globals &lt;QNAME&gt;</text>
+        <comment>(Print the value of variable specified)</comment>
 </li>
 </usage>
 </cmd>
@@ -512,12 +512,12 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 <summary>Print a list of local stylesheet variables or parameters. Print the value of a local variable</summary>
 <usage>
 <li>
-	<text>locals</text>
-	<comment>(Print list of all locally available variables)</comment>
+        <text>locals</text>
+        <comment>(Print list of all locally available variables)</comment>
 </li>
 <li>
-	<text>locals &lt;QNAME&gt;</text>
-	<comment>(Print the value of variable specified)</comment>
+        <text>locals &lt;QNAME&gt;</text>
+        <comment>(Print the value of variable specified)</comment>
 </li>
 </usage>
 </cmd>
@@ -555,21 +555,21 @@ Ie if you have loaded a stylsheet file of ../en/xsldoc.xsl you can do this
 <summary>Change to the path specified by a xpath.</summary>
 <usage>
 <li>
-	<text>cd &lt;XPATH&gt;</text>
+        <text>cd &lt;XPATH&gt;</text>
 </li>
 <li>
-	<text>cd -t&lt;TEMPLATENAME&gt;</text>
-	<comment>(To changes current SOURCE node to a be xsl template with name &lt;NAME&gt;, but does execute source command)</comment>
+        <text>cd -t&lt;TEMPLATENAME&gt;</text>
+        <comment>(To changes current SOURCE node to a be xsl template with name &lt;NAME&gt;, but does execute source command)</comment>
 </li>
 <li>
-	<text>cd -s&lt;XPATH&gt;</text>
-	<comment>(An absolute xPath to node within stylesheet)</comment>
+        <text>cd -s&lt;XPATH&gt;</text>
+        <comment>(An absolute xPath to node within stylesheet)</comment>
 </li>
 <li>
-	<text>cd   &lt;SHORTCUT&gt; &lt;XPATH&gt;</text>
+        <text>cd   &lt;SHORTCUT&gt; &lt;XPATH&gt;</text>
 </li>
 <li>
-	<text>     Where SHORTCUT can be either</text>
+        <text>     Where SHORTCUT can be either</text>
 </li>
 <li>
 <list>

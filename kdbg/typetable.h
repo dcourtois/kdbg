@@ -98,7 +98,7 @@ public:
      * Does the file name match this library?
      */
     bool matchFileName(const QString& fileName) const {
-	return m_shlibNameRE.indexIn(fileName) >= 0;
+        return m_shlibNameRE.indexIn(fileName) >= 0;
     }
 
     /**
@@ -179,13 +179,13 @@ protected:
     TypeTable::TypeInfoRefMap m_types;
     TypeTable::TypeInfoRefMap m_aliasDict;
     struct TemplateInfo {
-	QStringList templateArgs;
-	const TypeInfo* type;
+        QStringList templateArgs;
+        const TypeInfo* type;
     };
     typedef std::multimap<QString, TemplateInfo> TemplateMap;
-    TemplateMap m_templates;	//!< one or more template patterns per template name
+    TemplateMap m_templates;        //!< one or more template patterns per template name
     static TemplateMap::value_type
-		template2Info(const TypeTable::TypeInfoMap::value_type& tt);
+                template2Info(const TypeTable::TypeInfoMap::value_type& tt);
     static QStringList splitTemplateArgs(const QString& t);
     bool m_parseQt2QStrings;
     bool m_QCharIsShort;

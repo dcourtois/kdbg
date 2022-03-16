@@ -12,7 +12,7 @@
 #include <list>
 #include <map>
 #include "envvar.h"
-#include "exprwnd.h"			/* some compilers require this */
+#include "exprwnd.h"                        /* some compilers require this */
 
 class ExprWnd;
 class VarTree;
@@ -37,10 +37,10 @@ class KDebugger : public QObject
 {
     Q_OBJECT
 public:
-    KDebugger(QWidget* parent,		/* will be used as the parent for dialogs */
-	      ExprWnd* localVars,
-	      ExprWnd* watchVars,
-	      QListWidget* backtrace);
+    KDebugger(QWidget* parent,                /* will be used as the parent for dialogs */
+              ExprWnd* localVars,
+              ExprWnd* watchVars,
+              QListWidget* backtrace);
     ~KDebugger();
 
     /**
@@ -52,7 +52,7 @@ public:
      * @return false if an error occurs.
      */
     bool debugProgram(const QString& executable,
-		      DebuggerDriver* driver);
+                      DebuggerDriver* driver);
 
     /**
      * Uses the specified core to debug the active program.
@@ -215,7 +215,7 @@ public:
      * debuggee is running at the moment.
      */
     bool setBreakpoint(QString fileName, int lineNo,
-		       const DbgAddr& address, bool temporary);
+                       const DbgAddr& address, bool temporary);
 
     /**
      * Set a breakpoint.
@@ -235,7 +235,7 @@ public:
      * debuggee is running at the moment.
      */
     bool enableDisableBreakpoint(QString fileName, int lineNo,
-				 const DbgAddr& address);
+                                 const DbgAddr& address);
 
     /**
      * Enables or disables the specified breakpoint.
@@ -264,8 +264,8 @@ public:
      * debuggee is running at the moment.
      */
     bool conditionalBreakpoint(int id,
-			       const QString& condition,
-			       int ignoreCount)
+                               const QString& condition,
+                               int ignoreCount)
     { return conditionalBreakpoint(breakpointById(id), condition, ignoreCount); }
 
     /**
@@ -330,9 +330,9 @@ public:
      * Terminal emulation level.
      */
     enum TTYLevel {
-	ttyNone = 0,			/* ignore output, input triggers EOF */
-	ttySimpleOutputOnly = 1,	/* minmal output emulation, input triggers EOF */
-	ttyFull = 7			/* program needs full emulation */
+        ttyNone = 0,                        /* ignore output, input triggers EOF */
+        ttySimpleOutputOnly = 1,        /* minmal output emulation, input triggers EOF */
+        ttyFull = 7                        /* program needs full emulation */
     };
 
     /**
@@ -370,16 +370,16 @@ public:
 
 protected:
     QString m_inferiorTerminal;
-    QString m_debuggerCmd;		/* per-program setting */
-    TTYLevel m_ttyLevel;		/* level of terminal emulation */
+    QString m_debuggerCmd;                /* per-program setting */
+    TTYLevel m_ttyLevel;                /* level of terminal emulation */
     bool startDriver();
     void stopDriver();
     void writeCommand();
     
-    std::list<QString> m_watchEvalExpr;	/* exprs to evaluate for watch window */
+    std::list<QString> m_watchEvalExpr;        /* exprs to evaluate for watch window */
     std::list<Breakpoint> m_brkpts;
-    QString m_memoryExpression;		/* memory location to watch */
-    unsigned m_memoryFormat;		/* how that output should look */
+    QString m_memoryExpression;                /* memory location to watch */
+    unsigned m_memoryFormat;                /* how that output should look */
     unsigned m_memoryLength;         /* memory length to watch */
     QString m_memoryStartExpression; /* start memory location to watch */
     unsigned m_memoryTotalLength;    /* memory total length to watch */
@@ -390,8 +390,8 @@ protected:
     void handleRunCommands(const char* output);
     void updateAllExprs();
     void updateProgEnvironment(const QString& args, const QString& wd,
-			       const std::map<QString,EnvVar>& newVars,
-			       const QSet<QString>& newOptions);
+                               const std::map<QString,EnvVar>& newVars,
+                               const QSet<QString>& newOptions);
     void parseLocals(const char* output, std::list<ExprValue*>& newVars);
     void handleLocals(const char* output);
     bool handlePrint(CmdQueueItem* cmd, const char* output);
@@ -422,7 +422,7 @@ protected:
 
     typedef std::list<Breakpoint>::iterator BrkptIterator;
     BrkptIterator breakpointByFilePos(QString file, int lineNo,
-				    const DbgAddr& address);
+                                    const DbgAddr& address);
     BrkptIterator breakpointById(int id);
     CmdQueueItem* executeBreakpoint(const Breakpoint* bp, bool queueOnly);
     void newBreakpoint(CmdQueueItem* cmd, const char* output);
@@ -433,35 +433,35 @@ protected:
     bool enableDisableBreakpoint(BrkptIterator bp);
     bool deleteBreakpoint(BrkptIterator bp);
     bool conditionalBreakpoint(BrkptIterator bp,
-			       const QString& condition,
-			       int ignoreCount);
+                               const QString& condition,
+                               int ignoreCount);
 
-    bool m_haveExecutable;		/* has an executable been specified */
-    bool m_programActive;		/* is the program active (possibly halting in a brkpt)? */
-    bool m_programRunning;		/* is the program executing (not stopped)? */
-    bool m_sharedLibsListed;		/* do we know the shared libraries loaded by the prog? */
+    bool m_haveExecutable;                /* has an executable been specified */
+    bool m_programActive;                /* is the program active (possibly halting in a brkpt)? */
+    bool m_programRunning;                /* is the program executing (not stopped)? */
+    bool m_sharedLibsListed;                /* do we know the shared libraries loaded by the prog? */
     QString m_executable;
     QString m_corefile;
-    QString m_attachedPid;		/* user input of attaching to pid */
+    QString m_attachedPid;                /* user input of attaching to pid */
     QString m_programArgs;
     QString m_remoteDevice;
-    QString m_programWD;		/* working directory of gdb */
-    QString m_cpuTarget;		/* name of the target */
-    QString m_flavor;			/* program-specific disassembly flavor */
-    QString m_effectiveFlavor;		/* the actual flavor as reported from the debugger */
-    QString m_globalFlavor;		/* which flavor is saved globally? */
-    std::map<QString,QString> m_envVars;	/* environment variables set by user */
-    QSet<QString> m_boolOptions;	/* boolean options */
-    QStringList m_sharedLibs;		/* shared libraries used by program */
-    ProgramTypeTable* m_typeTable;	/* known types used by the program */
-    KConfig* m_programConfig;		/* program-specific settings (brkpts etc) */
+    QString m_programWD;                /* working directory of gdb */
+    QString m_cpuTarget;                /* name of the target */
+    QString m_flavor;                        /* program-specific disassembly flavor */
+    QString m_effectiveFlavor;                /* the actual flavor as reported from the debugger */
+    QString m_globalFlavor;                /* which flavor is saved globally? */
+    std::map<QString,QString> m_envVars;        /* environment variables set by user */
+    QSet<QString> m_boolOptions;        /* boolean options */
+    QStringList m_sharedLibs;                /* shared libraries used by program */
+    ProgramTypeTable* m_typeTable;        /* known types used by the program */
+    KConfig* m_programConfig;                /* program-specific settings (brkpts etc) */
     void saveProgramSettings();
     void restoreProgramSettings();
     QString readDebuggerCmd(const KConfigGroup& g);
 
     // debugger process
     DebuggerDriver* m_d;
-    bool m_explicitKill;		/* whether we are killing gdb ourselves */
+    bool m_explicitKill;                /* whether we are killing gdb ourselves */
 
     QString m_statusMessage;
 
@@ -515,7 +515,7 @@ signals:
      * differently in the source window.
      */
     void updatePC(const QString& filename, int lineNo,
-		  const DbgAddr& address, int frameNo);
+                  const DbgAddr& address, int frameNo);
 
     /**
      * This signal is emitted when gdb detects that the executable has been

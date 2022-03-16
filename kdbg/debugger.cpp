@@ -436,7 +436,7 @@ bool KDebugger::setBreakpoint(QString file, int lineNo,
 void KDebugger::setBreakpoint(Breakpoint* bp, bool queueOnly)
 {
     CmdQueueItem* cmd = executeBreakpoint(bp, queueOnly);
-    cmd->m_brkpt = bp;	// used in newBreakpoint()
+    cmd->m_brkpt = bp;        // used in newBreakpoint()
 }
 
 CmdQueueItem* KDebugger::executeBreakpoint(const Breakpoint* bp, bool queueOnly)
@@ -618,7 +618,7 @@ bool KDebugger::isIdle() const
 
 bool KDebugger::startDriver()
 {
-    emit debuggerStarting();		/* must set m_inferiorTerminal */
+    emit debuggerStarting();                /* must set m_inferiorTerminal */
 
     /*
      * If the per-program command string is empty, use the global setting
@@ -636,7 +636,7 @@ bool KDebugger::startDriver()
      * redirections are also necessary depending on the tty emulation
      * level.
      */
-    int redirect = RDNstdin|RDNstdout|RDNstderr;	/* redirect everything */
+    int redirect = RDNstdin|RDNstdout|RDNstderr;        /* redirect everything */
     if (!m_inferiorTerminal.isEmpty()) {
         switch (m_ttyLevel) {
         default:
@@ -673,7 +673,7 @@ void KDebugger::stopDriver()
      * is exiting kdbg.
      */
     QApplication::processEvents(QEventLoop::AllEvents, 1000);
-    int maxTime = 20;			/* about 20 seconds */
+    int maxTime = 20;                        /* about 20 seconds */
     while (m_haveExecutable && maxTime > 0) {
         // give gdb time to die (and send a SIGCLD)
         ::sleep(1);
@@ -716,8 +716,8 @@ void KDebugger::gdbExited()
     m_programActive = false;
     m_programRunning = false;
     m_explicitKill = false;
-    m_debuggerCmd = QString();		/* use global setting at next start! */
-    m_attachedPid = QString();		/* we are no longer attached to a process */
+    m_debuggerCmd = QString();                /* use global setting at next start! */
+    m_attachedPid = QString();                /* we are no longer attached to a process */
     m_ttyLevel = ttyFull;
     m_brkpts.clear();
 
@@ -737,7 +737,7 @@ QString KDebugger::getConfigForExe(const QString& name)
     QCryptographicHash dirDigest(QCryptographicHash::Md5);
     dirDigest.addData(dir.toUtf8());
     QString hash = dirDigest.result().toBase64();
-    hash.replace('/', QString());	// avoid directory separators
+    hash.replace('/', QString());        // avoid directory separators
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                 + "/sessions/"
                 + hash.left(15) + "-" + fi.fileName();
@@ -936,7 +936,7 @@ void KDebugger::saveBreakpoints(KConfig* config)
     for (BrkptIterator bp = m_brkpts.begin(); bp != m_brkpts.end(); ++bp)
     {
         if (bp->type == Breakpoint::watchpoint)
-            continue;			/* don't save watchpoints */
+            continue;                        /* don't save watchpoints */
         groupName = QString::asprintf(BPGroup, i++);
 
         /* remove remmants */
@@ -1024,7 +1024,7 @@ void KDebugger::restoreBreakpoints(KConfig* config)
 // parse output of command cmd
 void KDebugger::parse(CmdQueueItem* cmd, const char* output)
 {
-    ASSERT(cmd != 0);			/* queue mustn't be empty */
+    ASSERT(cmd != 0);                        /* queue mustn't be empty */
 
     TRACE(QString(__PRETTY_FUNCTION__) + " parsing " + output);
 
@@ -1079,7 +1079,7 @@ void KDebugger::parse(CmdQueueItem* cmd, const char* output)
             QString msg = m_d->driverName() + ": " + m_statusMessage;
             KMessageBox::sorry(parentWidget(), msg);
             m_executable = "";
-            m_corefile = "";		/* don't process core file */
+            m_corefile = "";                /* don't process core file */
             m_haveExecutable = false;
         }
         break;
@@ -1100,7 +1100,7 @@ void KDebugger::parse(CmdQueueItem* cmd, const char* output)
             if (!cmd->m_byUser) {
                 m_d->queueCmdAgain(DCinfolinemain);
             }
-            m_corefile = QString();	/* core file not available any more */
+            m_corefile = QString();        /* core file not available any more */
         }
         break;
     case DCinfolinemain:
@@ -1246,7 +1246,7 @@ void KDebugger::handleRunCommands(const char* output)
             TRACE(QString("re-trying brkpt loc: %2 file: %3 line: %1")
                     .arg(bp->lineNo).arg(bp->location, bp->fileName));
             CmdQueueItem* cmd = executeBreakpoint(&*bp, true);
-            cmd->m_existingBrkpt = bp->id;	// used in newBreakpoint()
+            cmd->m_existingBrkpt = bp->id;        // used in newBreakpoint()
             flags |= DebuggerDriver::SFrefreshBreak;
         }
     }
@@ -1428,7 +1428,7 @@ void KDebugger::parseLocals(const char* output, std::list<ExprValue*>& newVars)
     std::list<ExprValue*> vars;
     m_d->parseLocals(output, vars);
 
-    QString origName;			/* used in renaming variables */
+    QString origName;                        /* used in renaming variables */
     while (!vars.empty())
     {
         ExprValue* variable = vars.front();
@@ -1473,7 +1473,7 @@ bool KDebugger::handlePrint(CmdQueueItem* cmd, const char* output)
         delete variable;
     }
 
-    evalExpressions();			/* enqueue dereferenced pointers */
+    evalExpressions();                        /* enqueue dereferenced pointers */
 
     return true;
 }
@@ -1524,7 +1524,7 @@ bool KDebugger::handlePrintDeref(CmdQueueItem* cmd, const char* output)
         delete dummyParent;
     }
 
-    evalExpressions();			/* enqueue dereferenced pointers */
+    evalExpressions();                        /* enqueue dereferenced pointers */
 
     return true;
 }
@@ -1721,7 +1721,7 @@ void KDebugger::handleFindType(CmdQueueItem* cmd, const char* output)
         }
     }
 
-    evalExpressions();			/* queue more of them */
+    evalExpressions();                        /* queue more of them */
 }
 
 void KDebugger::handlePrintStruct(CmdQueueItem* cmd, const char* output)
@@ -1746,7 +1746,7 @@ void KDebugger::handlePrintStruct(CmdQueueItem* cmd, const char* output)
     QString partValue;
     if (errorValue)
     {
-        partValue = "?""?""?";	// 2 question marks in a row would be a trigraph
+        partValue = "?""?""?";        // 2 question marks in a row would be a trigraph
     } else {
         partValue = partExpr->m_value;
     }
@@ -1774,7 +1774,7 @@ void KDebugger::handlePrintStruct(CmdQueueItem* cmd, const char* output)
     {
         // add current partValue (which might be the question marks)
         var->m_partialValue += partValue;
-        var->m_exprIndex++;		/* next part */
+        var->m_exprIndex++;                /* next part */
         var->m_exprIndexUseGuard = true;
         var->m_partialValue += var->m_type->m_displayString[var->m_exprIndex];
     }
@@ -1794,7 +1794,7 @@ void KDebugger::handlePrintStruct(CmdQueueItem* cmd, const char* output)
 
     cmd->m_exprWnd->updateStructValue(var);
 
-    evalExpressions();			/* enqueue dereferenced pointers */
+    evalExpressions();                        /* enqueue dereferenced pointers */
 }
 
 /* queues the first printStruct command for a struct */
@@ -1844,7 +1844,7 @@ void KDebugger::evalStructExpression(VarTree* var, ExprWnd* wnd, bool immediate)
     {
         if (m_typeTable->parseQt2QStrings())
         {
-            expr = expr.mid(15, expr.length());	/* strip off /QString::Data */
+            expr = expr.mid(15, expr.length());        /* strip off /QString::Data */
             dbgCmd = DCprintQStringStruct;
         } else {
             /*
@@ -2251,7 +2251,7 @@ void KDebugger::setProgramCounter(const QString& file, int line, const DbgAddr& 
     if (addr.isEmpty()) {
         // find address of the specified line
         CmdQueueItem* cmd = m_d->executeCmd(DCinfoline, file, line);
-        cmd->m_lineNo = -1;		/* indicates "Set PC" UI command */
+        cmd->m_lineNo = -1;                /* indicates "Set PC" UI command */
     } else {
         // move the program counter to that address
         m_d->executeCmd(DCsetpc, addr.asString());
@@ -2283,7 +2283,7 @@ void KDebugger::handleSetPC(const char* /*output*/)
 void KDebugger::slotValueEdited(VarTree* expr, const QString& text)
 {
     if (text.simplified().isEmpty())
-        return;			       /* no text entered: ignore request */
+        return;                               /* no text entered: ignore request */
 
     ExprWnd* wnd = static_cast<ExprWnd*>(expr->treeWidget());
     TRACE(QString::asprintf("Changing %s to ",

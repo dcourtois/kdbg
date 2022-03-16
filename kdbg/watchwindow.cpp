@@ -5,20 +5,20 @@
  */
 
 #include "watchwindow.h"
-#include <klocalizedstring.h>		/* i18n */
+#include <klocalizedstring.h>                /* i18n */
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QKeyEvent>
 #include <QMimeData>
 
 WatchWindow::WatchWindow(QWidget* parent) :
-	QWidget(parent),
-	m_watchEdit(this),
-	m_watchAdd(i18n(" Add "), this),
-	m_watchDelete(i18n(" Del "), this),
-	m_watchVariables(this, i18n("Expression")),
-	m_watchV(this),
-	m_watchH()
+        QWidget(parent),
+        m_watchEdit(this),
+        m_watchAdd(i18n(" Add "), this),
+        m_watchDelete(i18n(" Del "), this),
+        m_watchVariables(this, i18n("Expression")),
+        m_watchV(this),
+        m_watchH()
 {
     // setup the layout
     m_watchAdd.setMinimumSize(m_watchAdd.sizeHint());
@@ -37,7 +37,7 @@ WatchWindow::WatchWindow(QWidget* parent) :
     connect(&m_watchAdd, SIGNAL(clicked()), SIGNAL(addWatch()));
     connect(&m_watchDelete, SIGNAL(clicked()), SIGNAL(deleteWatch()));
     connect(&m_watchVariables, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-	    SLOT(slotWatchHighlighted()));
+            SLOT(slotWatchHighlighted()));
 
     m_watchVariables.installEventFilter(this);
     setAcceptDrops(true);
@@ -51,11 +51,11 @@ bool WatchWindow::eventFilter(QObject*, QEvent* ev)
 {
     if (ev->type() == QEvent::KeyPress)
     {
-	QKeyEvent* kev = static_cast<QKeyEvent*>(ev);
-	if (kev->key() == Qt::Key_Delete) {
-	    emit deleteWatch();
-	    return true;
-	}
+        QKeyEvent* kev = static_cast<QKeyEvent*>(ev);
+        if (kev->key() == Qt::Key_Delete) {
+            emit deleteWatch();
+            return true;
+        }
     }
     return false;
 }
@@ -63,21 +63,21 @@ bool WatchWindow::eventFilter(QObject*, QEvent* ev)
 void WatchWindow::dragEnterEvent(QDragEnterEvent* event)
 {
     if (event->mimeData()->hasText())
-	event->acceptProposedAction();
+        event->acceptProposedAction();
 }
 
 void WatchWindow::dropEvent(QDropEvent* event)
 {
     if (event->mimeData()->hasText()) {
-	QString text = event->mimeData()->text();
-	// pick only the first line
-	text = text.trimmed();
-	int pos = text.indexOf('\n');
-	if (pos > 0)
-	    text.truncate(pos);
-	text = text.trimmed();
-	if (!text.isEmpty())
-	    emit textDropped(text);
+        QString text = event->mimeData()->text();
+        // pick only the first line
+        text = text.trimmed();
+        int pos = text.indexOf('\n');
+        if (pos > 0)
+            text.truncate(pos);
+        text = text.trimmed();
+        if (!text.isEmpty())
+            emit textDropped(text);
     }
     event->acceptProposedAction();
 }

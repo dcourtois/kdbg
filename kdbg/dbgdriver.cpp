@@ -9,21 +9,21 @@
 #include <QStringList>
 #include <ctype.h>
 #include <signal.h>
-#include <stdlib.h>			/* strtol, atoi */
+#include <stdlib.h>                        /* strtol, atoi */
 #include <algorithm>
 #include "mydebug.h"
 #include <assert.h>
 
 
 DebuggerDriver::DebuggerDriver() :
-	m_state(DSidle),
-	m_activeCmd(0)
+        m_state(DSidle),
+        m_activeCmd(0)
 {
     // debugger process
     connect(this, SIGNAL(readyReadStandardOutput()), SLOT(slotReceiveOutput()));
     connect(this, SIGNAL(bytesWritten(qint64)), SLOT(slotCommandRead()));
     connect(this, SIGNAL(finished(int, QProcess::ExitStatus)),
-	    SLOT(slotExited()));
+            SLOT(slotExited()));
 }
 
 DebuggerDriver::~DebuggerDriver()
@@ -44,11 +44,11 @@ bool DebuggerDriver::startup(QString cmdStr)
 
     // debugger executable
     if (cmdStr.isEmpty())
-	cmdStr = defaultInvocation();
+        cmdStr = defaultInvocation();
 
     QStringList cmd = cmdStr.split(' ', Qt::SplitBehaviorFlags::SkipEmptyParts);
     if (cmd.isEmpty())
-	return false;
+        return false;
     QString pgm = cmd.takeFirst();
 
 #if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
@@ -61,12 +61,12 @@ bool DebuggerDriver::startup(QString cmdStr)
     setProcessChannelMode(MergedChannels);
     start(pgm, cmd);
     if (!waitForStarted(-1))
-	return false;
+        return false;
 
     // open log file
     if (!m_logFile.isOpen() && !m_logFileName.isEmpty()) {
-	m_logFile.setFileName(m_logFileName);
-	m_logFile.open(QIODevice::WriteOnly);
+        m_logFile.setFileName(m_logFileName);
+        m_logFile.open(QIODevice::WriteOnly);
     }
 
     return true;
@@ -76,7 +76,7 @@ void DebuggerDriver::slotExited()
 {
     static const char txt[] = "\n====== debugger exited ======\n";
     if (m_logFile.isOpen()) {
-	m_logFile.write(txt,sizeof(txt)-1);
+        m_logFile.write(txt,sizeof(txt)-1);
     }
 
     // reset state
@@ -87,29 +87,29 @@ void DebuggerDriver::slotExited()
 
 
 CmdQueueItem* DebuggerDriver::executeCmdString(DbgCommand cmd,
-					       QString cmdString, bool clearLow)
+                                               QString cmdString, bool clearLow)
 {
     // place a new command into the high-priority queue
     CmdQueueItem* cmdItem = new CmdQueueItem(cmd, cmdString);
     m_hipriCmdQueue.push(cmdItem);
 
     if (clearLow) {
-	if (m_state == DSrunningLow) {
-	    // take the liberty to interrupt the running command
-	    m_state = DSinterrupted;
-	    ::kill(processId(), SIGINT);
-	    ASSERT(m_activeCmd != 0);
-	    TRACE(QString::asprintf("interrupted the command %d",
-		  (m_activeCmd ? m_activeCmd->m_cmd : -1)));
-	    delete m_activeCmd;
-	    m_activeCmd = 0;
-	}
-	flushLoPriQueue();
+        if (m_state == DSrunningLow) {
+            // take the liberty to interrupt the running command
+            m_state = DSinterrupted;
+            ::kill(processId(), SIGINT);
+            ASSERT(m_activeCmd != 0);
+            TRACE(QString::asprintf("interrupted the command %d",
+                  (m_activeCmd ? m_activeCmd->m_cmd : -1)));
+            delete m_activeCmd;
+            m_activeCmd = 0;
+        }
+        flushLoPriQueue();
     }
     // if gdb is idle, send it the command
     if (m_state == DSidle) {
-	ASSERT(m_activeCmd == 0);
-	writeCommand();
+        ASSERT(m_activeCmd == 0);
+        writeCommand();
     }
 
     return cmdItem;
@@ -121,7 +121,7 @@ bool CmdQueueItem::IsEqualCmd::operator()(CmdQueueItem* cmd) const
 }
 
 CmdQueueItem* DebuggerDriver::queueCmdString(DbgCommand cmd,
-					     QString cmdString, QueueMode mode)
+                                             QString cmdString, QueueMode mode)
 {
     // place a new command into the low-priority queue
     std::list<CmdQueueItem*>::iterator i;
@@ -129,35 +129,35 @@ CmdQueueItem* DebuggerDriver::queueCmdString(DbgCommand cmd,
     switch (mode) {
     case QMoverrideMoreEqual:
     case QMoverride:
-	// check whether gdb is currently processing this command
-	if (m_activeCmd != 0 &&
-	    m_activeCmd->m_cmd == cmd && m_activeCmd->m_cmdString == cmdString)
-	{
-	    return m_activeCmd;
-	}
-	// check whether there is already the same command in the queue
-	i = find_if(m_lopriCmdQueue.begin(), m_lopriCmdQueue.end(), CmdQueueItem::IsEqualCmd(cmd, cmdString));
-	if (i != m_lopriCmdQueue.end()) {
-	    // found one
-	    cmdItem = *i;
-	    if (mode == QMoverrideMoreEqual) {
-		// All commands are equal, but some are more equal than others...
-		// put this command in front of all others
-		m_lopriCmdQueue.erase(i);
-		m_lopriCmdQueue.push_front(cmdItem);
-	    }
-	    break;
-	} // else none found, so add it
-	// fall through
+        // check whether gdb is currently processing this command
+        if (m_activeCmd != 0 &&
+            m_activeCmd->m_cmd == cmd && m_activeCmd->m_cmdString == cmdString)
+        {
+            return m_activeCmd;
+        }
+        // check whether there is already the same command in the queue
+        i = find_if(m_lopriCmdQueue.begin(), m_lopriCmdQueue.end(), CmdQueueItem::IsEqualCmd(cmd, cmdString));
+        if (i != m_lopriCmdQueue.end()) {
+            // found one
+            cmdItem = *i;
+            if (mode == QMoverrideMoreEqual) {
+                // All commands are equal, but some are more equal than others...
+                // put this command in front of all others
+                m_lopriCmdQueue.erase(i);
+                m_lopriCmdQueue.push_front(cmdItem);
+            }
+            break;
+        } // else none found, so add it
+        // fall through
     case QMnormal:
-	cmdItem = new CmdQueueItem(cmd, cmdString);
-	m_lopriCmdQueue.push_back(cmdItem);
+        cmdItem = new CmdQueueItem(cmd, cmdString);
+        m_lopriCmdQueue.push_back(cmdItem);
     }
 
     // if gdb is idle, send it the command
     if (m_state == DSidle) {
-	ASSERT(m_activeCmd == 0);
-	writeCommand();
+        ASSERT(m_activeCmd == 0);
+        writeCommand();
     }
 
     return cmdItem;
@@ -174,16 +174,16 @@ void DebuggerDriver::writeCommand()
     CmdQueueItem* cmd;
     DebuggerState newState = DScommandSent;
     if (!m_hipriCmdQueue.empty()) {
-	cmd = m_hipriCmdQueue.front();
-	m_hipriCmdQueue.pop();
+        cmd = m_hipriCmdQueue.front();
+        m_hipriCmdQueue.pop();
     } else if (!m_lopriCmdQueue.empty()) {
-	cmd = m_lopriCmdQueue.front();
-	m_lopriCmdQueue.pop_front();
-	newState = DScommandSentLow;
+        cmd = m_lopriCmdQueue.front();
+        m_lopriCmdQueue.pop_front();
+        newState = DScommandSentLow;
     } else {
-	// nothing to do
-	m_state = DSidle;		/* is necessary if command was interrupted earlier */
-	return;
+        // nothing to do
+        m_state = DSidle;                /* is necessary if command was interrupted earlier */
+        return;
     }
 
     m_activeCmd = cmd;
@@ -193,17 +193,17 @@ void DebuggerDriver::writeCommand()
     const char* data = str.data();
     qint64 len = str.length();
     while (len > 0) {
-	qint64 n = write(data, len);
-	if (n <= 0)
-	    break;	// ignore error
-	len -= n;
-	data += n;
+        qint64 n = write(data, len);
+        if (n <= 0)
+            break;        // ignore error
+        len -= n;
+        data += n;
     }
 
     // write also to log file
     if (m_logFile.isOpen()) {
-	m_logFile.write(str);
-	m_logFile.flush();
+        m_logFile.write(str);
+        m_logFile.flush();
     }
 
     m_state = newState;
@@ -212,16 +212,16 @@ void DebuggerDriver::writeCommand()
 void DebuggerDriver::flushLoPriQueue()
 {
     while (!m_lopriCmdQueue.empty()) {
-	delete m_lopriCmdQueue.back();
-	m_lopriCmdQueue.pop_back();
+        delete m_lopriCmdQueue.back();
+        m_lopriCmdQueue.pop_back();
     }
 }
 
 void DebuggerDriver::flushHiPriQueue()
 {
     while (!m_hipriCmdQueue.empty()) {
-	delete m_hipriCmdQueue.front();
-	m_hipriCmdQueue.pop();
+        delete m_hipriCmdQueue.front();
+        m_hipriCmdQueue.pop();
     }
 }
 
@@ -229,7 +229,7 @@ void DebuggerDriver::flushCommands(bool hipriOnly)
 {
     flushHiPriQueue();
     if (!hipriOnly) {
-	flushLoPriQueue();
+        flushLoPriQueue();
     }
 }
 
@@ -250,18 +250,18 @@ void DebuggerDriver::slotCommandRead()
 
     // set the flag that reflects whether the program is really running
     switch (m_activeCmd->m_cmd) {
-    case DCrun:	case DCcont: case DCnext: case DCstep: case DCfinish: case DCuntil:
-	emit inferiorRunning();
-	break;
+    case DCrun:        case DCcont: case DCnext: case DCstep: case DCfinish: case DCuntil:
+        emit inferiorRunning();
+        break;
     default:
-	break;
+        break;
     }
 
     // process delayed output
     while (!m_delayedOutput.empty()) {
-	QByteArray delayed = m_delayedOutput.front();
-	m_delayedOutput.pop();
-	processOutput(delayed);
+        QByteArray delayed = m_delayedOutput.front();
+        m_delayedOutput.pop();
+        processOutput(delayed);
     }
 }
 
@@ -276,15 +276,15 @@ void DebuggerDriver::slotReceiveOutput()
      * which is not commited.
      */
     if (m_state == DScommandSent || m_state == DScommandSentLow) {
-	ASSERT(m_activeCmd != 0);
-	ASSERT(!m_activeCmd->m_committed);
-	/*
-	 * We received output before we got signal bytesWritten. Collect this
-	 * output, it will be processed by commandRead when it gets the
-	 * acknowledgment for the uncommitted command.
-	 */
-	m_delayedOutput.push(data);
-	return;
+        ASSERT(m_activeCmd != 0);
+        ASSERT(!m_activeCmd->m_committed);
+        /*
+         * We received output before we got signal bytesWritten. Collect this
+         * output, it will be processed by commandRead when it gets the
+         * acknowledgment for the uncommitted command.
+         */
+        m_delayedOutput.push(data);
+        return;
     }
     processOutput(data);
 }
@@ -293,8 +293,8 @@ void DebuggerDriver::processOutput(const QByteArray& data)
 {
     // write to log file (do not log delayed output - it would appear twice)
     if (m_logFile.isOpen()) {
-	m_logFile.write(data);
-	m_logFile.flush();
+        m_logFile.write(data);
+        m_logFile.flush();
     }
     
     /*
@@ -304,9 +304,9 @@ void DebuggerDriver::processOutput(const QByteArray& data)
      * also continues gdb, which repeats the prompt!
      */
     if (m_activeCmd == 0 && m_state != DSinterrupted) {
-	// ignore the output
-	TRACE("ignoring stray output: " + QString(data));
-	return;
+        // ignore the output
+        TRACE("ignoring stray output: " + QString(data));
+        return;
     }
     ASSERT(m_state == DSrunning || m_state == DSrunningLow || m_state == DSinterrupted);
     ASSERT(m_activeCmd != 0 || m_state == DSinterrupted);
@@ -320,66 +320,66 @@ void DebuggerDriver::processOutput(const QByteArray& data)
     int promptStart = findPrompt(m_output);
     if (promptStart >= 0)
     {
-	// found prompt!
+        // found prompt!
 
-	// terminate output before the prompt
-	m_output.resize(promptStart);
+        // terminate output before the prompt
+        m_output.resize(promptStart);
 
-	/*
-	 * We've got output for the active command. But if it was
-	 * interrupted, ignore it.
-	 */
-	if (m_state != DSinterrupted) {
-	    /*
-	     * m_state shouldn't be DSidle while we are parsing the output
-	     * so that all commands produced by parse() go into the queue
-	     * instead of being written to gdb immediately.
-	     */
-	    ASSERT(m_state != DSidle);
-	    CmdQueueItem* cmd = m_activeCmd;
-	    m_activeCmd = 0;
-	    commandFinished(cmd);
-	    delete cmd;
-	}
+        /*
+         * We've got output for the active command. But if it was
+         * interrupted, ignore it.
+         */
+        if (m_state != DSinterrupted) {
+            /*
+             * m_state shouldn't be DSidle while we are parsing the output
+             * so that all commands produced by parse() go into the queue
+             * instead of being written to gdb immediately.
+             */
+            ASSERT(m_state != DSidle);
+            CmdQueueItem* cmd = m_activeCmd;
+            m_activeCmd = 0;
+            commandFinished(cmd);
+            delete cmd;
+        }
 
-	// empty buffer
-	m_output.clear();
-	// also clear delayed output if interrupted
-	if (m_state == DSinterrupted) {
-	    m_delayedOutput = std::queue<QByteArray>();
-	}
+        // empty buffer
+        m_output.clear();
+        // also clear delayed output if interrupted
+        if (m_state == DSinterrupted) {
+            m_delayedOutput = std::queue<QByteArray>();
+        }
 
-	/*
-	 * We parsed some output successfully. Unless there's more delayed
-	 * output, the debugger must be idle now, so send down the next
-	 * command.
-	 */
-	if (m_delayedOutput.empty()) {
-	    if (m_hipriCmdQueue.empty() && m_lopriCmdQueue.empty()) {
-		// no pending commands
-		m_state = DSidle;
-		emit enterIdleState();
-	    } else {
-		writeCommand();
-	    }
-	}
+        /*
+         * We parsed some output successfully. Unless there's more delayed
+         * output, the debugger must be idle now, so send down the next
+         * command.
+         */
+        if (m_delayedOutput.empty()) {
+            if (m_hipriCmdQueue.empty() && m_lopriCmdQueue.empty()) {
+                // no pending commands
+                m_state = DSidle;
+                emit enterIdleState();
+            } else {
+                writeCommand();
+            }
+        }
     }
 }
 
 void DebuggerDriver::dequeueCmdByVar(VarTree* var)
 {
     if (var == 0)
-	return;
+        return;
 
     std::list<CmdQueueItem*>::iterator i = m_lopriCmdQueue.begin();
     while (i != m_lopriCmdQueue.end()) {
-	if ((*i)->m_expr != 0 && var->isAncestorEq((*i)->m_expr)) {
-	    // this is indeed a critical command; delete it
-	    TRACE("removing critical lopri-cmd: " + (*i)->m_cmdString);
-	    delete *i;
-	    m_lopriCmdQueue.erase(i++);
-	} else
-	    ++i;
+        if ((*i)->m_expr != 0 && var->isAncestorEq((*i)->m_expr)) {
+            // this is indeed a critical command; delete it
+            TRACE("removing critical lopri-cmd: " + (*i)->m_cmdString);
+            delete *i;
+            m_lopriCmdQueue.erase(i++);
+        } else
+            ++i;
     }
 }
 
@@ -398,7 +398,7 @@ StackFrame::~StackFrame()
 
 
 DbgAddr::DbgAddr(const QString& aa) :
-	a(aa)
+        a(aa)
 {
     cleanAddr();
 }
@@ -409,10 +409,10 @@ DbgAddr::DbgAddr(const QString& aa) :
 void DbgAddr::cleanAddr()
 {
     if (a.isEmpty())
-	return;
+        return;
 
     while (a[0] == '0' || a[0] == 'x') {
-	a.remove(0, 1);
+        a.remove(0, 1);
     }
 }
 
@@ -427,9 +427,9 @@ void DbgAddr::operator=(const QString& aa)
 QString DbgAddr::asString() const
 {
     if (a.isEmpty())
-	return QString();
+        return QString();
     else
-	return "0x" + a;
+        return "0x" + a;
 }
 
 bool operator==(const DbgAddr& a1, const DbgAddr& a2)
@@ -440,19 +440,19 @@ bool operator==(const DbgAddr& a1, const DbgAddr& a2)
 bool operator>(const DbgAddr& a1, const DbgAddr& a2)
 {
     if (a1.a.length() > a2.a.length())
-	return true;
+        return true;
     if (a1.a.length() < a2.a.length())
-	return false;
+        return false;
     return QString::compare(a1.a, a2.a) > 0;
 }
 
 
 Breakpoint::Breakpoint() :
-	id(0),
-	type(breakpoint),
-	temporary(false),
-	enabled(true),
-	ignoreCount(0),
-	hitCount(0),
-	lineNo(0)
+        id(0),
+        type(breakpoint),
+        temporary(false),
+        enabled(true),
+        ignoreCount(0),
+        hitCount(0),
+        lineNo(0)
 { }

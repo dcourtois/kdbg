@@ -104,7 +104,7 @@ public slots:
 
     // Shows the disassembled code at the location given by file and lineNo
     void slotDisassembled(const QString& fileName, int lineNo,
-			  const std::list<DisassembledCode>& disass);
+                          const std::list<DisassembledCode>& disass);
 
     // Updates line items after expanding/collapsing disassembled code
     void slotExpandCollapse(int lineNo);
@@ -115,24 +115,24 @@ public slots:
 
 protected:
     bool activatePath(QString pathname, int lineNo, const DbgAddr& address);
-    virtual bool activateWindow(SourceWindow* fw, int lineNo, const DbgAddr& address);	/* -1 doesnt change line */
+    virtual bool activateWindow(SourceWindow* fw, int lineNo, const DbgAddr& address);        /* -1 doesnt change line */
     void contextMenuEvent(QContextMenuEvent* e) override;
     bool event(QEvent* event) override;
     void setPC(bool set, const QString& fileName, int lineNo,
-	       const DbgAddr& address, int frameNo);
+               const DbgAddr& address, int frameNo);
     SourceWindow* findByFileName(const QString& fileName) const;
-    QString m_lastOpenDir;		/* where user opened last file */
+    QString m_lastOpenDir;                /* where user opened last file */
     
     // program counter
     QString m_pcFile;
-    int m_pcLine;			/* -1 if no PC */
-    QString m_pcAddress;		/* exact address of PC */
+    int m_pcLine;                        /* -1 if no PC */
+    QString m_pcAddress;                /* exact address of PC */
     int m_pcFrame;
 
-    QPoint m_tipLocation;		/* where tip should appear */
-    QRect m_tipRegion;			/* where tip should remain */
+    QPoint m_tipLocation;                /* where tip should appear */
+    QRect m_tipRegion;                        /* where tip should remain */
 
-    int m_tabWidth;			/* number of chars */
+    int m_tabWidth;                        /* number of chars */
 
 public:
     // find dialog

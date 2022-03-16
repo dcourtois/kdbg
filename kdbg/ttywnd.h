@@ -57,7 +57,7 @@ public:
 
 protected:
     STTY* m_tty;
-    QTextCursor m_pos;		//!< tracks horizontal cursor position
+    QTextCursor m_pos;                //!< tracks horizontal cursor position
     void contextMenuEvent(QContextMenuEvent*) override;
 
 protected slots:

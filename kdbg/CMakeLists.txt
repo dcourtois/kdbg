@@ -21,24 +21,24 @@ FIND_PROGRAM(PROG_PS ps)
 IF (PROG_PS)
     set(PS_ARGS -eo pid,ppid,uid,vsz,etime,time,args)
     execute_process(COMMAND ${PROG_PS} ${PS_ARGS}
-		RESULT_VARIABLE PS_FAILED
-		OUTPUT_QUIET ERROR_QUIET)
+                RESULT_VARIABLE PS_FAILED
+                OUTPUT_QUIET ERROR_QUIET)
     IF (NOT PS_FAILED)
-	execute_process(
-		COMMAND ${PROG_PS} ${PS_ARGS}
-		COMMAND sed -e "s/  */ /g" -e 1q
-		OUTPUT_VARIABLE PS_HEADER)
-	string(STRIP "${PS_HEADER}" PS_HEADER)
-	IF (PS_HEADER STREQUAL "PID PPID UID VSZ ELAPSED TIME COMMAND")
-	    # enclose arguments in double-quotes
-	    set(PS_COMMAND \"${PROG_PS}\")
-	    set(PS_MSG ${PROG_PS})
-	    foreach (I ${PS_ARGS})
-		set(PS_COMMAND ${PS_COMMAND},\"${I}\")
-		set(PS_MSG "${PS_MSG} ${I}")
-	    endforeach (I)
-	    message("-- Found 'ps' command: ${PS_MSG}")
-	ENDIF (PS_HEADER STREQUAL "PID PPID UID VSZ ELAPSED TIME COMMAND")
+        execute_process(
+                COMMAND ${PROG_PS} ${PS_ARGS}
+                COMMAND sed -e "s/  */ /g" -e 1q
+                OUTPUT_VARIABLE PS_HEADER)
+        string(STRIP "${PS_HEADER}" PS_HEADER)
+        IF (PS_HEADER STREQUAL "PID PPID UID VSZ ELAPSED TIME COMMAND")
+            # enclose arguments in double-quotes
+            set(PS_COMMAND \"${PROG_PS}\")
+            set(PS_MSG ${PROG_PS})
+            foreach (I ${PS_ARGS})
+                set(PS_COMMAND ${PS_COMMAND},\"${I}\")
+                set(PS_MSG "${PS_MSG} ${I}")
+            endforeach (I)
+            message("-- Found 'ps' command: ${PS_MSG}")
+        ENDIF (PS_HEADER STREQUAL "PID PPID UID VSZ ELAPSED TIME COMMAND")
     ENDIF (NOT PS_FAILED)
 ENDIF (PROG_PS)
 IF (NOT PS_COMMAND)

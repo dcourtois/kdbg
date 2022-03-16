@@ -20,8 +20,8 @@ class PgmArgs : public QDialog, private Ui::PgmArgsBase
     Q_OBJECT
 public:
     PgmArgs(QWidget* parent, const QString& pgm,
-	    const std::map<QString,QString>& envVars,
-	    const QStringList& allOptions);
+            const std::map<QString,QString>& envVars,
+            const QStringList& allOptions);
     ~PgmArgs();
 
     void setArgs(const QString& text) { programArgs->setText(text); }
