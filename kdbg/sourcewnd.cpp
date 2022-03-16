@@ -779,7 +779,7 @@ void SourceWindow::actionCollapseRow(int row)
 void SourceWindow::setTabWidth(int numChars)
 {
     if (numChars <= 0)
-        numChars = 8;
+        numChars = 4;
     QFontMetrics fm(document()->defaultFont());
     QString s;
     int w = fm.horizontalAdvance(s.fill('x', numChars));
