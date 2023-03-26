@@ -3,14 +3,25 @@ KDE, the K Desktop Environment.
 
 To build and install:
 
-        cmake .
-        make
-        sudo make install
+        git clone https://github.com/j6t/kdbg.git
+        cmake -S kdbg -B kdbg-build
+        cmake --build kdbg-build
+        sudo cmake --install kdbg-build
+
+You'll need the following packages:
+
+        extra-cmake-modules
+        libkf5i18n-dev
+        libkf5config-dev
+        libkf5iconthemes-dev
+        libkf5xmlgui-dev
+        libkf5windowsystem-dev
+
 
 It may be necessary to tell the install location explicitly,
 then use, for example,
 
-        cmake -DCMAKE_INSTALL_PREFIX=/usr .
+        cmake -DCMAKE_INSTALL_PREFIX=/usr kdbg-build
 
 The KDE header files libraries must be available. Make sure
 that the development packages are installed.
