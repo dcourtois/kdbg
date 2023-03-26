@@ -89,6 +89,7 @@ DebuggerMainWnd::DebuggerMainWnd() :
 
     QDockWidget* dw1 = createDockWidget("Stack", i18n("Stack"));
     m_btWindow = new QListWidget(dw1);
+    m_btWindow->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     dw1->setWidget(m_btWindow);
     QDockWidget* dw2 = createDockWidget("Locals", i18n("Locals"));
     m_localVariables = new ExprWnd(dw2, i18n("Variable"));
@@ -309,7 +310,7 @@ void DebuggerMainWnd::initKAction()
                                m_debugger, SLOT(programRun()), "exec_run");
     connect(m_runAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_stepIntoAction = createAction(i18n("Step &into"),
-                                    "debug-step-into", Qt::Key_F8,
+                                    "debug-step-into", Qt::Key_F11,
                                     m_debugger, SLOT(programStep()), "exec_step_into");
     connect(m_stepIntoAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_stepOverAction = createAction(i18n("Step &over"),
@@ -317,7 +318,7 @@ void DebuggerMainWnd::initKAction()
                                     m_debugger, SLOT(programNext()), "exec_step_over");
     connect(m_stepOverAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_stepOutAction = createAction(i18n("Step o&ut"),
-                                   "debug-step-out", Qt::Key_F6,
+                                   "debug-step-out", Qt::SHIFT+Qt::Key_F11,
                                    m_debugger, SLOT(programFinish()), "exec_step_out");
     connect(m_stepOutAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_toCursorAction = createAction(i18n("Run to &cursor"),
@@ -325,7 +326,7 @@ void DebuggerMainWnd::initKAction()
                                     this, SLOT(slotExecUntil()), "exec_run_to_cursor");
     connect(m_toCursorAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_stepIntoIAction = createAction(i18n("Step i&nto by instruction"),
-                                     "debug-step-into-instruction", Qt::SHIFT+Qt::Key_F8,
+                                     "debug-step-into-instruction", Qt::Key_F12,
                                      m_debugger, SLOT(programStepi()), "exec_step_into_by_insn");
     connect(m_stepIntoIAction, SIGNAL(triggered()), this, SLOT(intoBackground()));
     m_stepOverIAction = createAction(i18n("Step o&ver by instruction"),
@@ -337,7 +338,7 @@ void DebuggerMainWnd::initKAction()
                                       m_filesWindow, SLOT(slotMoveProgramCounter()), "exec_movepc");
     m_breakAction = createAction(i18n("&Break"), 0,
                                  m_debugger, SLOT(programBreak()), "exec_break");
-    m_killAction = createAction(i18n("&Kill"), 0,
+    m_killAction = createAction(i18n("&Kill"), 0, Qt::SHIFT+Qt::Key_F5,
                                 m_debugger, SLOT(programKill()), "exec_kill");
     m_restartAction = createAction(i18n("Re&start"), 0,
                                    m_debugger, SLOT(programRunAgain()), "exec_restart");

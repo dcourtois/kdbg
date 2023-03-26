@@ -8,6 +8,7 @@
 #include <kiconloader.h>
 #include <QDialog>
 #include <QFileInfo>
+#include <QFontDatabase>
 #include <QPainter>
 #include <QLabel>
 #include <QBitmap>
@@ -39,6 +40,8 @@ BreakpointTable::BreakpointTable(QWidget* parent) :
         QWidget(parent),
         m_debugger(0)
 {
+    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
     m_ui.setupUi(this);
     connect(m_ui.bpEdit, SIGNAL(returnPressed()),
             this, SLOT(on_btAddBP_clicked()));

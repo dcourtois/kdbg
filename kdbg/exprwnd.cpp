@@ -5,17 +5,18 @@
  */
 
 #include "exprwnd.h"
-#include "typetable.h"
+#include <QFocusEvent>
+#include <QFontDatabase>
 #include <QHeaderView>
-#include <QStringList>
+#include <QKeyEvent>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QFocusEvent>
-#include <QKeyEvent>
 #include <QScrollBar>
+#include <QStringList>
 #include <kiconloader.h>                /* icons */
 #include <klocalizedstring.h>                /* i18n */
 #include "mydebug.h"
+#include "typetable.h"
 
 VarTree::VarTree(VarTree* parent, ExprValue* v) :
         QTreeWidgetItem(parent),
@@ -319,6 +320,8 @@ ExprWnd::ExprWnd(QWidget* parent, const QString& colHeader) :
         QTreeWidget(parent),
         m_edit(0)
 {
+    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
     QTreeWidgetItem* pHeaderItem = new QTreeWidgetItem();
     pHeaderItem->setText(0, colHeader);
     pHeaderItem->setText(1, i18n("Value"));

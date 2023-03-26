@@ -6,9 +6,10 @@
 
 #include "threadlist.h"
 #include "dbgdriver.h"
-#include <klocalizedstring.h>
 #include <kiconloader.h>
+#include <klocalizedstring.h>
 #include <QBitmap>
+#include <QFontDatabase>
 #include <QHeaderView>
 #include <QPainter>
 
@@ -39,6 +40,8 @@ void ThreadEntry::setFunction(const QString& func)
 ThreadList::ThreadList(QWidget* parent) :
         QTreeWidget(parent)
 {
+    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
     setHeaderLabels(QStringList() << i18n("Thread ID") << i18n("Location"));
     header()->setSectionResizeMode(1, QHeaderView::Interactive);
     setRootIsDecorated(false);
